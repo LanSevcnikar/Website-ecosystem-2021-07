@@ -16,8 +16,8 @@
     </div>
 </template>
 <script>
-import Notes from '../components/notes/Notes.vue'
-import NotesSide from '../components/notes/NotesSide.vue'
+import Notes from '../components/Notes.vue'
+import NotesSide from '../components/NotesSide.vue'
 
 export default {
     components: {
