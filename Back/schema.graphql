@@ -12,11 +12,14 @@ type Mutation {
     lastName: String
   ): Student
   createStudent(collegeId: ID, firstName: String, lastName: String): String
+  signUp(input:SignUpInput):String
 }
 
-# {
-
-# }
+input SignUpInput {
+   email:String!,
+   password:String!,
+   firstName:String!
+}
 
 type College {
   id: ID!
