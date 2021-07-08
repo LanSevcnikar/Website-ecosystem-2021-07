@@ -1,5 +1,6 @@
 type Query {
   greeting: String
+  greetingAuth: String
   students: [Student]
   studentById(id: ID!): Student
   sayHello(name: String!): String

@@ -8,6 +8,12 @@ const Query = {
   studentById: (root, args, context, info) => {
     return db.students.get(args.id);
   },
+  greetingAuth: (root, args, context, info) => {
+    if (!context.user) {
+      throw new Error('Unauthorized');
+    }
+    return "Hello from TutorialsPoint, welcome back : " + context.user.firstName;
+  }
 };
 
 const Mutation = {
