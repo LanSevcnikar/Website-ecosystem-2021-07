@@ -1,25 +1,57 @@
-type Query { 
-   greeting:String
-   students:[Student]
-   studentById(id:ID!):Student 
-   sayHello(name:String!):String
+type Query {
+  greeting: String
+  students: [Student]
+  studentById(id: ID!): Student
+  sayHello(name: String!): String
 }
 
 type Mutation {
-   addStudent(firstName: String, lastName: String): Student
+  createStudentReturn(
+    collegeId: ID
+    firstName: String
+    lastName: String
+  ): Student
+  createStudent(collegeId: ID, firstName: String, lastName: String): String
 }
 
+# {
+
+# }
+
 type College {
-   id:ID!
-   name:String
-   location:String
-   rating:Float
+  id: ID!
+  name: String
+  location: String
+  rating: Float
 }
 
 type Student {
-   id:ID!
-   firstName:String
-   lastName:String
-   fullName:String
-   college:College
+  id: ID!
+  firstName: String
+  lastName: String
+  fullName: String
+  college: College
 }
+
+#The exclamation mark means that the field is non nullable
+
+# mutation somemutation {
+#   createStudent(collegeId: "col-101", firstName: "Susan", lastName: "George") {
+#     id
+#     fullName
+#     college {
+#       name
+#     }
+#   }
+# }
+
+# mutation someothermutation {
+#   createStudent(collegeId: "col-101", firstName: "Jure", lastName: "Tim")
+# }
+
+# query somequery {
+#   greeting
+#   studentById(id: "rJMtnfEpO") {
+#     fullName
+#   }
+# }
