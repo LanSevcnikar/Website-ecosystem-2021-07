@@ -1,11 +1,11 @@
+
 <template>
-  <div style="background-color: red;">
+  <div>
     <p>
-      Notes
+      NI am making a new note here, do not worry
     </p>
-    Something here
-    <router-link to="/notes/new">
-      Routerlink
+    <router-link to="/notes">
+        FuckIt
     </router-link>
   </div>
 </template>
@@ -15,4 +15,5 @@ export default {};
 </script>
 
 <style>
+
 </style>

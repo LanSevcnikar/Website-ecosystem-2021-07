@@ -1,55 +1,35 @@
 <template>
-  <div class="container-fluid p-0">
-    <ul class="navbar-nav">
+  <div>
+    <ul class="nav nav-fill nav-pills">
       <li class="nav-item">
-        <a
-          @click="currentComponent = 'dashboard'"
-          class="nav-link active"
-          aria-current="page"
-          href="javascript:;"
-          >Dashboard</a
-        >
+        <router-link to="/dashboard" class="nav-link" aria-current="page">
+        dashboard
+        </router-link>
       </li>
       <li class="nav-item">
-        <a
-          @click="currentComponent = 'notes'"
-          class="nav-link"
-          href="javascript:;"
-          >Notes</a
-        >
+        <router-link to="/tasks" class="nav-link" aria-current="page">
+          Todos
+        </router-link>
       </li>
       <li class="nav-item">
-        <a
-          @click="currentComponent = 'tasks'"
-          class="nav-link"
-          href="javascript:;"
-          >Tasks</a
-        >
+        <router-link to="/notes" class="nav-link" aria-current="page">
+          Notes
+        </router-link>
       </li>
     </ul>
     <div class="container-fluid">
-      <component :is="currentComponent" />
+      <router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
-import Tasks from "./components/todos/Todos.vue";
-import Dashboard from "./components/dashboard/Dashboard.vue";
-import Notes from "./components/notes/Notes.vue";
-
 export default {
   name: "App",
   data() {
-    return {
-      currentComponent: "dashboard",
-    };
+    return {};
   },
-  components: {
-    Tasks,
-    Notes,
-    Dashboard,
-  },
+  components: {},
 };
 </script>
 
