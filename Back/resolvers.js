@@ -1,4 +1,5 @@
 const db = require("./db");
+const Hashes = require('jshashes')
 const Query = {
   greeting: () => {
     return "hello from  TutorialsPoint !!!";
@@ -35,6 +36,13 @@ const Mutation = {
     });
     return db.students.get(id)
   },
+  deleteStudent: (root, args, context, info) => {
+    if (!context.user) {
+      throw new Error('Unauthorized');
+    }
+    console.info("just deleted a student")
+    return db.students.delete(args.id)
+  },
   createStudent: (root, args, context, info) => {
     return db.students.create({
       collegeId: args.collegeId,
@@ -51,7 +59,7 @@ const Mutation = {
     }
     return db.students.create({
       email: args.input.email,
-      password: args.input.password,
+      password: new Hashes.SHA256().b64(args.input.password),
       firstName: args.input.fname,
       lastName: args.input.lname
     })

@@ -14,6 +14,7 @@ type Mutation {
     firstName: String
     lastName: String
   ): Student
+  deleteStudent(id: ID!): String
   createStudent(collegeId: ID, firstName: String, lastName: String): String
   signUp(input:SignUpInput):String
 }

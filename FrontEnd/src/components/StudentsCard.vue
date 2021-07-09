@@ -16,9 +16,11 @@
       <student-item
         v-for="(coll, index) in students"
         :key="index"
+        :index="index"
         :name="coll.fullName"
         :email="coll.email"
         :uni="coll.college"
+        @deleteMe="deleteMe"
       ></student-item>
     <div class="text-danger mt-2" v-if="reminder">
       You need to be logged in to see this
@@ -40,6 +42,38 @@ export default {
     };
   },
   methods: {
+    deleteMe(index) {
+      console.log(index)
+      console.log(this.students[index].id)
+      
+      const jwttoken = localStorage.getItem("jwtToken");
+      const D = JSON.stringify({
+          query: `
+            mutation deleteStudent($id:ID!){
+              deleteStudent(id:$id)
+            }
+          `,
+          variables: {
+            id: this.students[index].id,
+          },
+        });
+
+      console.log(D)
+
+      callAPI("http://localhost:9000/graphql", D, jwttoken)
+        .then((r) => {
+          console.log("Hi")
+          r.json()
+        }).then((data) => {
+           console.log(data);
+        }).then(this.getstudents())
+    },
+
+
+
+
+
+
     getstudents() {
       this.students = [];
       const jwttoken = localStorage.getItem("jwtToken");
@@ -48,12 +82,16 @@ export default {
           getAllStudents {
             fullName
             email
+            id
             college {
               name
             }
           }
         }`,
       });
+
+
+
       callAPI("http://localhost:9000/graphql", DD, jwttoken)
         .then((r) => r.json())
         .then((data) => {
@@ -65,7 +103,9 @@ export default {
               fullName: fullName,
               college: uni,
               email: coll.email,
+              id: coll.id,
             });
+            this.reminder = false;
           });
         })
         .catch((this.reminder = true));

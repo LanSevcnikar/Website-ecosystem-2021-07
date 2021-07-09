@@ -2,6 +2,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
 const expressJwt = require('express-jwt'); 
+const Hashes = require('jshashes')
 
 const jwt = require('jsonwebtoken'); //auth
 const db = require('./db');
@@ -36,7 +37,8 @@ app.use('/graphiql',graphiqlExpress({endpointURL:'/graphql'}))
 //authenticate students
 app.post('/login', (req, res) => {
    const email = req.body.email;
-   const password = req.body.password;
+   let password = req.body.password;
+   password =  new Hashes.SHA256().b64(password)
    console.info('Hi', email, password)
 
    if(!email || !password) {
