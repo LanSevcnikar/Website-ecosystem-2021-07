@@ -3,20 +3,19 @@ const cors = require('cors');
 const express = require('express');
 const expressJwt = require('express-jwt'); 
 const Hashes = require('jshashes')
-
 const jwt = require('jsonwebtoken'); //auth
+const fs = require('fs');
+const {makeExecutableSchema} = require('graphql-tools');
+const  {graphiqlExpress,graphqlExpress} = require('apollo-server-express');
+const resolvers = require('./resolvers');
 const db = require('./db');
 
-var port = process.env.PORT || 9000
+const port = process.env.PORT || 9000
 const jwtSecret = Buffer.from('Zn8Q5tyZ/G1MHltc4F/gTkVJMlrbKiZt', 'base64');
-const app = express();
-
-const fs = require('fs')
 const typeDefs = fs.readFileSync('./schema.graphql',{encoding:'utf-8'})
-const resolvers = require('./resolvers')
-const {makeExecutableSchema} = require('graphql-tools')
-
 const schema = makeExecutableSchema({typeDefs, resolvers})
+
+const app = express();
 
 app.use(cors(), bodyParser.json(), expressJwt({
    secret: jwtSecret,
@@ -24,22 +23,17 @@ app.use(cors(), bodyParser.json(), expressJwt({
    algorithms: ['sha1', 'RS256', 'HS256'],
 }));
 
-const  {graphiqlExpress,graphqlExpress} = require('apollo-server-express')
-
-
-// I have no idea how but this somehow makes sure that it is the correct token. Changing the token is difficult
+// Used to check tokens
 app.use('/graphql', graphqlExpress((req) => ({
    schema,
    context: {user: req.user && db.students.get(req.user.sub)}
 })));
 app.use('/graphiql',graphiqlExpress({endpointURL:'/graphql'}))
 
-//authenticate students
+// Login a user
 app.post('/login', (req, res) => {
    const email = req.body.email;
-   let password = req.body.password;
-   password =  new Hashes.SHA256().b64(password)
-   console.info('Hi', email, password)
+   const password = new Hashes.SHA256().b64(req.body.password);
 
    if(!email || !password) {
       res.sendStatus(401);
@@ -51,7 +45,8 @@ app.post('/login', (req, res) => {
       res.sendStatus(401);
       return;
    }
-   const token = jwt.sign({sub: user.id}, jwtSecret, { expiresIn: '1h' });
+   
+   const token = jwt.sign({sub: user.id}, jwtSecret, { expiresIn: 20 });
    res.send({token});
 });
 
