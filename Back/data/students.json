@@ -24,22 +24,16 @@
     "collegeId": "col-101"
   },
   {
-    "id": "SkYghGEad",
-    "collegeId": "S101",
-    "firstName": "Lan",
-    "lastName": "Sevcnikar"
-  },
-  {
     "id": "SkAJCfE6O",
     "collegeId": "col-101",
     "firstName": "Susan",
     "lastName": "George"
   },
   {
-    "id": "S1M_7YHa_",
-    "email": "email@email",
+    "id": "rJJ15oS6_",
+    "email": "lan.sevcnikar@druga.si",
     "password": "password",
-    "firstName": "Jure",
-    "lastName": "Potok"
+    "firstName": "Lan",
+    "lastName": "Sevcnikar"
   }
 ]

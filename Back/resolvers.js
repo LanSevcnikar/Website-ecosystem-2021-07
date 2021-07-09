@@ -5,6 +5,10 @@ const Query = {
   },
   sayHello: (root, args, context, info) => `Hi ${args.name} GraphQL server says Hello to you!!`,
   students: () => db.students.list(),
+  getAllColleges: () => {
+    console.info("allCollagesListed")
+    return db.colleges.list()
+  },
   studentById: (root, args, context, info) => {
     return db.students.get(args.id);
   },
@@ -13,6 +17,12 @@ const Query = {
       throw new Error('Unauthorized');
     }
     return "Hello from TutorialsPoint, welcome back : " + context.user.firstName;
+  },
+  getAllStudents: (root, args, context, info) => {
+    if (!context.user) {
+      throw new Error('Unauthorized');
+    }
+    return db.students.list()
   }
 };
 
@@ -51,7 +61,7 @@ const Mutation = {
 
 const Student = {
   fullName: (root, args, context, info) => {
-    return root.firstName + "___" + root.lastName;
+    return root.firstName + " " + root.lastName;
   },
   college: (root) => {
     return db.colleges.get(root.collegeId);

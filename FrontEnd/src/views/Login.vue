@@ -78,10 +78,10 @@
 export default {
   data() {
     return {
-      email: "email@email",
-      password: "password",
-      fname: "Jure",
-      lname: "Potok",
+      email: "",
+      password: "",
+      fname: "",
+      lname: "",
       website: "Login",
       oppositeWebsite: "Signup",
       loggedIn: false,

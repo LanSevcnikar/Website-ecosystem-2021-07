@@ -4,6 +4,8 @@ type Query {
   students: [Student]
   studentById(id: ID!): Student
   sayHello(name: String!): String
+  getAllColleges: [College]
+  getAllStudents: [Student]
 }
 
 type Mutation {
@@ -36,6 +38,7 @@ type Student {
   lastName: String
   fullName: String
   college: College
+  email: String
 }
 
 #The exclamation mark means that the field is non nullable

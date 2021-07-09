@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import HomePage from './components/HomePage.vue'
-import CaS from './components/CaS.vue'
-import LoginPage from './components/Login.vue'
-import NotFound from './components/404.vue'
+import HomePage from './views/HomePage.vue'
+import CaS from './views/CaS.vue'
+import LoginPage from './views/Login.vue'
+import NotFound from './views/404.vue'
 
 const router = createRouter({
     history: createWebHistory(),
