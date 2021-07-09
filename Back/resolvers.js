@@ -37,7 +37,7 @@ const Mutation = {
     return db.students.get(id)
   },
   deleteStudent: (root, args, context, info) => {
-    if (!context.user) {
+    if (!context.user || context.user.role != "admin") {
       throw new Error('Unauthorized');
     }
     console.info("just deleted a student")
@@ -61,7 +61,9 @@ const Mutation = {
       email: args.input.email,
       password: new Hashes.SHA256().b64(args.input.password),
       firstName: args.input.fname,
-      lastName: args.input.lname
+      lastName: args.input.lname,
+      role: "user",
+      collegeId: "col-103"
     })
     //This is not really relevant here but it is just here to show how this sort of stuff works
   }

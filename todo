@@ -1,7 +1,10 @@
 1. Hashing and salting the passwords
+    I did the hashing, salting not yet
 2. Secure connection to the thing (httpS)
 3. add levels to authentication
 4. Make a simple UI
+    Done
 5. learn how to expire tokens
 6. learn how to extend tokens
-7. stop using internal storage and use cash/coockies
+7. stop using internal storage and use cash/coockies8
+8. Learn to use ACL to block certain paths
