@@ -34,5 +34,12 @@
     "collegeId": "col-101",
     "firstName": "Susan",
     "lastName": "George"
+  },
+  {
+    "id": "S1M_7YHa_",
+    "email": "email@email",
+    "password": "password",
+    "firstName": "Jure",
+    "lastName": "Potok"
   }
 ]

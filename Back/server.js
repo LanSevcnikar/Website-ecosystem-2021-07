@@ -25,6 +25,8 @@ app.use(cors(), bodyParser.json(), expressJwt({
 
 const  {graphiqlExpress,graphqlExpress} = require('apollo-server-express')
 
+
+// I have no idea how but this somehow makes sure that it is the correct token. Changing the token is difficult
 app.use('/graphql', graphqlExpress((req) => ({
    schema,
    context: {user: req.user && db.students.get(req.user.sub)}
@@ -35,13 +37,19 @@ app.use('/graphiql',graphiqlExpress({endpointURL:'/graphql'}))
 app.post('/login', (req, res) => {
    const email = req.body.email;
    const password = req.body.password;
+   console.info('Hi', email, password)
+
+   if(!email || !password) {
+      res.sendStatus(401);
+      return;
+   }
 
    const user = db.students.list().find((user) =>  user.email === email);
    if (!(user && user.password === password)) {
       res.sendStatus(401);
       return;
    }
-   const token = jwt.sign({sub: user.id}, jwtSecret);
+   const token = jwt.sign({sub: user.id}, jwtSecret, { expiresIn: '1h' });
    res.send({token});
 });
 

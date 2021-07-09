@@ -33,19 +33,18 @@ const Mutation = {
     })
   },
   signUp: (root, args, context, info) => {
-    const { email, firstName, password } = args.input;
-    const emailExpression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const isValidEmail = emailExpression.test(String(email).toLowerCase())
-    if (!isValidEmail)
-      throw new Error("email not in proper format")
-
-    if (firstName.length > 15)
-      throw new Error("firstName should be less than 15 characters")
-
-    if (password.length < 8)
-      throw new Error("password should be minimum 8 characters")
-
-    return "success";
+    const st = { ...args }
+    console.info(args)
+    const user = db.students.list().find((user) =>  user.email ===  args.input.email);
+    if(user){
+      return db.students.get(user);
+    }
+    return db.students.create({
+      email: args.input.email,
+      password: args.input.password,
+      firstName: args.input.fname,
+      lastName: args.input.lname
+    })
     //This is not really relevant here but it is just here to show how this sort of stuff works
   }
 };

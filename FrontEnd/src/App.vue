@@ -2,18 +2,18 @@
   <div>
     <ul class="nav nav-fill nav-pills">
       <li class="nav-item">
-        <router-link to="/dashboard" class="nav-link" aria-current="page">
-        dashboard
+        <router-link to="/home" class="nav-link" aria-current="page">
+        Home
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/tasks" class="nav-link" aria-current="page">
-          Todos
+        <router-link to="/login" class="nav-link" aria-current="page">
+        Login
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/notes" class="nav-link" aria-current="page">
-          Notes
+        <router-link to="/collagesandstudents" class="nav-link" aria-current="page">
+          Colleges and students
         </router-link>
       </li>
     </ul>

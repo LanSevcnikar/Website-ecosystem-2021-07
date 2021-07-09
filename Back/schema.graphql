@@ -19,7 +19,8 @@ type Mutation {
 input SignUpInput {
    email:String!,
    password:String!,
-   firstName:String!
+   fname:String!,
+   lname:String!
 }
 
 type College {

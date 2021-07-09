@@ -1,0 +1,6 @@
+1. Hashing and salting the passwords
+2. Secure connection to the thing (httpS)
+3. add levels to authentication
+4. Make a simple UI
+5. learn how to expire tokens
+6. learn how to extend tokens
