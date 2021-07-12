@@ -1,6 +1,6 @@
 <template>
   <div class="row p-3">
-    <div class="col-9">
+    <div class="col-7">
       <div class="row">
         <div class="h4">
           {{ name }}
@@ -10,7 +10,7 @@
         </div>
       </div>
     </div>
-    <div class="col-3 display-4 text-end">
+    <div class="col-5 display-4 text-end">
       {{ rating }}
     </div>
   </div>

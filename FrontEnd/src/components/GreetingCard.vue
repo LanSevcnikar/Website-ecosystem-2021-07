@@ -5,13 +5,13 @@
       <h6 class="card-subtitle mb-2 text-muted">
         simple check to see if the user is authenticated
       </h6>
-      <div class="row mt-4">
-        <div class="col-6" align="center">
+      <div class="row">
+        <div class="col-12 col-md-6 mt-3" align="center">
           <button type="button" class="btn btn-primary" @click="getGreeting()">
             Greet me without
           </button>
         </div>
-        <div class="col-6" align="center">
+        <div class="col-12 col-md-6 mt-3" align="center">
           <button
             type="button"
             class="btn btn-primary"
@@ -25,7 +25,6 @@
         You need to be logged in to see this
       </div>
     </div>
-    <button @click="loggg" class="btn btn-primary m-3">I am a button</button>
   </div>
 </template>
 

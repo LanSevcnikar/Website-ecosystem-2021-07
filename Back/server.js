@@ -11,7 +11,7 @@ const resolvers = require('./resolvers');
 const db = require('./db');
 
 const port = process.env.PORT || 9000
-const jwtSecret = Buffer.from('Zn8Q5tyZ/G1MHltc4F/gTkVJMlrbKiZt', 'base64');
+const jwtSecret = Buffer.from('LanHasAsecretLKeyANdITwasDumb', 'base64');
 const typeDefs = fs.readFileSync('./schema.graphql',{encoding:'utf-8'})
 const schema = makeExecutableSchema({typeDefs, resolvers})
 
@@ -47,8 +47,7 @@ app.post('/login', (req, res) => {
    }
    
    // Set timer 
-   const token = jwt.sign({sub: user.id}, jwtSecret, { expiresIn: 35 });
-   console.info(token)
+   const token = jwt.sign({sub: user.id}, jwtSecret, { expiresIn: 8 });
    res.send({token});
 });
 

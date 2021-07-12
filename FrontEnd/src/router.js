@@ -4,6 +4,7 @@ import HomePage from './views/HomePage.vue'
 import CaS from './views/CaS.vue'
 import LoginPage from './views/Login.vue'
 import NotFound from './views/404.vue'
+import About from './views/About.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -12,6 +13,7 @@ const router = createRouter({
         { path: '/home', component: HomePage },
         { path: '/login', component: LoginPage },
         { path: '/collagesandstudents', component: CaS },
+        { path: '/aboutme', component: About },
         { path: '/:pathMatch(.*)', component: NotFound }
     ],
     linkActiveClass: "active",

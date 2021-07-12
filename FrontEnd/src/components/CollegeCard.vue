@@ -2,13 +2,13 @@
   <div class="card" style="width: 60%; margin: auto; margin-top: 3em">
     <div class="card-body">
       <div class="row">
-        <div class="col-7">
+        <div class="col-9 col-md-7">
           <h5 class="card-title">College card</h5>
           <h6 class="card-subtitle mb-2 text-muted">
             Get a list of all the colleges
           </h6>
         </div>
-        <div class="col-5 text-center" allign="center" style="margin: auto">
+        <div class="col-md-5 col-md-3 text-center" allign="center" style="margin: auto">
           <button class="btn btn-primary" @click="getcollages">Get 'em</button>
         </div>
       </div>

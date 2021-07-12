@@ -16,6 +16,11 @@
           Colleges and students
         </router-link>
       </li>
+      <li class="nav-item">
+        <router-link to="/aboutme" class="nav-link" aria-current="page">
+          About me
+        </router-link>
+      </li>
     </ul>
     <div class="container-fluid">
       <router-view></router-view>
