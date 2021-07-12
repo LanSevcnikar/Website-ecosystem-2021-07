@@ -2,7 +2,7 @@ async function callAPI(url, data, token) {
     const response = await fetch(url, {
         method: "POST",
         headers: {
-            Authorization: (token),
+            Authorization: token,
             "Content-Type": "application/json",
         },
         body: data,

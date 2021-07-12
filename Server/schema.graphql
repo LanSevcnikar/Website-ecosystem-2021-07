@@ -2,14 +2,14 @@ type Query {
   greeting: String
   greetingAuth: String
   getAllColleges: [College]
-  #getAllStudents: [Student]
-  #checkLoginStatus: Boolean
+  getAllStudents: [Student]
+  checkLoginStatus: Boolean
 }
 
-# type Mutation {
-#   #deleteStudent(id: ID!): String
-#   #signUp(input:SignUpInput):String
-# }
+type Mutation {
+  deleteStudent(id: ID!): String
+  signUp(input:SignUpInput):String
+}
 
 input SignUpInput {
    email:String!,
