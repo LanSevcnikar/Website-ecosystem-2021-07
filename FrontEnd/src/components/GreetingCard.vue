@@ -44,11 +44,12 @@ export default {
     getGreeting: async function () {
       const data = { query: "{ greeting }" };
 
-      await callAPI(data).then((res) => alert(res.data.data.greeting));
+      await callAPI(data).then((res) => console.log(res.data));
     },
     getGreetingAuth: async function () {
       const data = { query: "{ greetingAuth }" };
       const jwttoken = localStorage.getItem("jwtToken");
+      console.log(jwttoken)
 
       const res = await callAPI(data, jwttoken);
       if(res.data.errors) alert(res.data.errors[0].message);

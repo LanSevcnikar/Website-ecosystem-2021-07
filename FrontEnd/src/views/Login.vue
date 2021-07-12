@@ -101,7 +101,7 @@ export default {
       this.loggedIn = false;
     }
     if(this.loggedIn == false){
-      localStorage.removeItem("jwtToken");
+      //localStorage.removeItem("jwtToken");
     }
   },
   methods: {
@@ -111,7 +111,7 @@ export default {
       this.oppositeWebsite = pt;
     },
     logout: function () {
-      localStorage.removeItem("jwtToken");
+      //localStorage.removeItem("jwtToken");
       this.loggedIn = false;
     },
     checkForm: async function (e) {
