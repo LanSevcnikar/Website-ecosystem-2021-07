@@ -25,12 +25,15 @@
         You need to be logged in to see this
       </div>
     </div>
+    <button @click="loggg" class="btn btn-primary m-3">I am a button</button>
   </div>
 </template>
 
 
 
 <script>
+import callAPI from "../functions/callAPI";
+
 export default {
   components: {},
   data() {
@@ -39,62 +42,22 @@ export default {
     };
   },
   methods: {
-    getGreeting: function () {
-      console.log("Greeting you");
-      const D = JSON.stringify({ query: "{ greeting }" });
-      postData("http://localhost:9000/graphql", D)
-        .then((r) => r.json())
-        .then((data) => {
-          this.reminder = false;
-          alert(data.data.greeting);
-        });
+    getGreeting: async function () {
+      const data = { query: "{ greeting }" };
+
+      await callAPI(data).then((res) => alert(res.data.data.greeting));
     },
-    getGreetingAuth: function () {
-      console.log("Greeting you");
-      const D = JSON.stringify({ query: "{ greetingAuth }" });
+    getGreetingAuth: async function () {
+      const data = { query: "{ greetingAuth }" };
       const jwttoken = localStorage.getItem("jwtToken");
-      postDataAuth("http://localhost:9000/graphql", D, jwttoken)
-        .then((r) => r.json())
-        .then((data) => {
-          console.log(data);
-          if (data.data.greetingAuth) {
-            alert(data.data.greetingAuth);
-            this.reminder = false;
-          } else {
-            this.reminder = true;
-          }
-        }).catch(this.reminder = true)
+
+      const res = await callAPI(data, jwttoken);
+      if(res.data.errors) alert(res.data.errors[0].message);
+      else{
+        if (res.status == 200) alert(res.data.data.greetingAuth);
+        else alert("Response came back with status: ", res.status)
+      }
     },
   },
 };
-
-async function postData(url, data) {
-  console.log(data);
-  const response = await fetch(url, {
-    method: "POST",
-    mode: "cors",
-    cache: "no-cache",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-    body: data,
-  });
-  return response;
-}
-
-async function postDataAuth(url, data, token) {
-  console.log(data);
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      Authorization: "bearer " + token,
-      "Content-Type": "application/json",
-    },
-    body: data,
-  });
-  return response;
-}
 </script>

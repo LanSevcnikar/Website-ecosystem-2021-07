@@ -75,6 +75,8 @@
 </template>
 
 <script>
+import callAPI from "../functions/callAPI";
+
 export default {
   data() {
     return {
@@ -87,24 +89,29 @@ export default {
       loggedIn: false,
     };
   },
-  created: function () {
+  created: async function () {
     if (localStorage.getItem("jwtToken")) {
-      this.loggedIn = true;
+      const data = { query: "{ checkLoginStatus }" };
+      const jwttoken = localStorage.getItem("jwtToken");
+      const res = await callAPI(data, jwttoken);
+      console.log(res.status);
+      if (res.status == 401) this.loggedIn = false;
+      else this.loggedIn = res.data.data ? true : false;
     } else {
       this.loggedIn = false;
     }
   },
   methods: {
-    switchLoginSignUp() {
+    switchLoginSignUp: function () {
       const pt = this.website;
       this.website = this.oppositeWebsite;
       this.oppositeWebsite = pt;
     },
-    logout() {
+    logout: function () {
       localStorage.removeItem("jwtToken");
       this.loggedIn = false;
     },
-    checkForm: function (e) {
+    checkForm: async function (e) {
       const email = this.email;
       const password = this.password;
 
@@ -116,7 +123,7 @@ export default {
         const lname = this.lname;
         this.fname = this.lname = "";
         console.log(email, password, fname, lname);
-        const D = JSON.stringify({
+        const data = {
           query: `
             mutation signUp($input:SignUpInput) {
               signUp(input:$input)
@@ -130,53 +137,27 @@ export default {
               lname: lname,
             },
           },
-        });
-        postData("http://localhost:9000/graphql", D)
-          .then((r) => r.json())
-          .then((data) => {
-            console.log(data);
-            if (data.token) {
-              localStorage.setItem("jwtToken", data.token);
-              this.loggedIn = true;
-            }
-          })
-          .catch(() => {
-            alert("Signup failed");
-          });
+        };
+
+        const res = await callAPI(data);
+        if (res.data.errors || res.status != 200) {
+          alert("something went wrong");
+        } else {
+          localStorage.setItem("jwtToken", res.data.data.token);
+          this.loggedIn = true;
+        }
         e.preventDefault();
       }
-      const D = JSON.stringify({ email, password });
-      console.log("function called");
-      postData("http://localhost:9000/login", D)
-        .then((r) => r.json())
-        .then((data) => {
-          if (data.token) {
-            localStorage.setItem("jwtToken", data.token);
-            this.loggedIn = true;
-          }
-        })
-        .catch(() => {
-          alert("Login failed");
-        });
+      const data = { email, password };
+      const res = await callAPI(data, "", "http://localhost:9000/login");
+      try{
+        localStorage.setItem("jwtToken", res.data.token);
+        this.loggedIn = true;
+      }catch{
+        alert("Login failed")
+      }
       e.preventDefault();
     },
   },
 };
-
-async function postData(url, data) {
-  console.log(data);
-  const response = await fetch(url, {
-    method: "POST",
-    mode: "cors",
-    cache: "no-cache",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-    body: data,
-  });
-  return response;
-}
 </script>

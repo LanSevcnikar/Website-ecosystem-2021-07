@@ -22,14 +22,15 @@
         :uni="coll.college"
         @deleteMe="deleteMe"
       ></student-item>
-    <div class="text-danger mt-2" v-if="reminder">
-      You need to be logged in to see this
-    </div>
+      <div class="text-danger mt-2" v-if="reminder">
+        You need to be logged in to see this
+      </div>
     </div>
   </div>
 </template>
 <script>
 import StudentItem from "./_studentcard.vue";
+import callAPI from "../functions/callAPI";
 
 export default {
   components: {
@@ -42,42 +43,27 @@ export default {
     };
   },
   methods: {
-    deleteMe(index) {
-      console.log(index)
-      console.log(this.students[index].id)
-      
+    deleteMe: async function (index) {
       const jwttoken = localStorage.getItem("jwtToken");
-      const D = JSON.stringify({
-          query: `
+      const data = {
+        query: `
             mutation deleteStudent($id:ID!){
               deleteStudent(id:$id)
             }
           `,
-          variables: {
-            id: this.students[index].id,
-          },
-        });
+        variables: {
+          id: this.students[index].id,
+        },
+      };
 
-      console.log(D)
-
-      callAPI("http://localhost:9000/graphql", D, jwttoken)
-        .then((r) => {
-          console.log("Hi")
-          r.json()
-        }).then((data) => {
-           console.log(data);
-        }).then(this.getstudents())
+      await callAPI(data, jwttoken);
+      await this.getstudents();
     },
 
-
-
-
-
-
-    getstudents() {
+    getstudents: async function () {
       this.students = [];
       const jwttoken = localStorage.getItem("jwtToken");
-      const DD = JSON.stringify({
+      const data = {
         query: `{
           getAllStudents {
             fullName
@@ -88,15 +74,12 @@ export default {
             }
           }
         }`,
-      });
-
-
-
-      callAPI("http://localhost:9000/graphql", DD, jwttoken)
-        .then((r) => r.json())
-        .then((data) => {
-          console.log(data, data.data, data.data.getAllStudents);
-          data.data.getAllStudents.forEach((coll) => {
+      };
+      const res = await callAPI(data, jwttoken);
+      if (res.data.errors) alert(res.data.errors[0].message);
+      else {
+        if (res.status == 200) {
+          res.data.data.getAllStudents.forEach((coll) => {
             const fullName = coll.fullName;
             const uni = coll.college ? coll.college.name : "";
             this.students.push({
@@ -105,25 +88,12 @@ export default {
               email: coll.email,
               id: coll.id,
             });
-            this.reminder = false;
           });
-        })
-        .catch((this.reminder = true));
+        } else alert("Response came back with status: ", res.status);
+      }
     },
   },
 };
-
-async function callAPI(url, data, token) {
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      Authorization: token ? "bearer " + token : "",
-      "Content-Type": "application/json",
-    },
-    body: data,
-  });
-  return response;
-}
 </script>
 
 <style>

@@ -24,6 +24,7 @@
 </template>
 <script>
 import collegeItem from "./_collegeItem.vue";
+import callAPI from "../functions/callAPI";
 
 export default {
   components: {
@@ -35,9 +36,9 @@ export default {
     };
   },
   methods: {
-    getcollages() {
+    getcollages: async function () {
       this.colleges = [];
-      const DD = JSON.stringify({
+      const data = {
         query: `{
           getAllColleges {
             name
@@ -45,29 +46,19 @@ export default {
             rating
           }
         }`,
-      });
-      callAPI("http://localhost:9000/graphql", DD, "")
-        .then((r) => r.json())
-        .then((data) => {
-          data.data.getAllColleges.forEach((coll) => {
+      };
+      const res = await callAPI(data);
+      if (res.data.errors) alert(res.data.errors[0].message);
+      else {
+        if (res.status == 200) {
+          res.data.data.getAllColleges.forEach((coll) => {
             this.colleges.push(coll);
           });
-        });
+        } else alert("Response came back with status: ", res.status);
+      }
     },
   },
 };
-
-async function callAPI(url, data, token) {
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      Authorization: token ? "bearer " + token : "",
-      "Content-Type": "application/json",
-    },
-    body: data,
-  });
-  return response;
-}
 </script>
 
 <style>

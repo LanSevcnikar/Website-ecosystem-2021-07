@@ -16,7 +16,13 @@
       </div>
     </div>
     <div class="col-3 m-auto">
-      <button class="btn btn-danger m-auto" v-if="hovering==false" @click="doSomething">Delete</button>
+      <button
+        class="btn btn-danger m-auto"
+        v-if="hovering == false"
+        @click="doSomething"
+      >
+        Delete
+      </button>
     </div>
   </div>
 </template>
@@ -29,11 +35,10 @@ export default {
     };
   },
   methods: {
-    doSomething(){
-      console.log("kill me", this.index)
-      this.$emit('deleteMe', this.index);
-    }
-  }
+    doSomething() {
+      this.$emit("deleteMe", this.index);
+    },
+  },
 };
 </script>
 

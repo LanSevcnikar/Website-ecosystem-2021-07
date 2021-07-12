@@ -1,21 +1,28 @@
 const db = require("./db");
+const notAuth = 'Unauthorized'
+
+
 const Hashes = require('jshashes')
 const Query = {
-  greeting: () => "hello from  TutorialsPoint !!!",
+  greeting: () => "Greetings and salutations",
   greetingAuth: (root, args, context, info) => {
-    if (!context.user) throw new Error('Unauthorized');
-    return "Hello from TutorialsPoint, welcome back : " + context.user.firstName;
+    if (!context.user) throw new Error(notAuth);
+    return "Greetings and salutations, " + context.user.firstName;
   },
   getAllColleges: () => db.colleges.list(),
   getAllStudents: (root, args, context, info) => {
-    if (!context.user) throw new Error('Unauthorized');
+    if (!context.user) throw new Error(notAuth);
     return db.students.list()
+  },
+  checkLoginStatus: (root, args, context, info) => {
+    if (!context.user) return false;
+    return true;
   }
 };
 
 const Mutation = {
   deleteStudent: (root, args, context, info) => {
-    if (!context.user || context.user.role != "admin") throw new Error('Unauthorized');
+    if (!context.user || context.user.role != "admin") throw new Error(notAuth);
     console.info("Deleted a student with the ID: ", args.id)
     return db.students.delete(args.id)
   },

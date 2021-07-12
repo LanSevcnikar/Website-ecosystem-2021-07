@@ -1,15 +1,6 @@
 [
   {
-    "id": "r1qr-6B6d",
-    "email": "jure.potok@gmail.com",
-    "password": "XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=",
-    "firstName": "Jure",
-    "lastName": "Potok",
-    "role": "user",
-    "collegeId": "col-103"
-  },
-  {
-    "id": "rkGU-6r6d",
+    "id": "SyPU2LYTO",
     "email": "lan.sevcnikar@druga.si",
     "password": "XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=",
     "firstName": "Lan",
@@ -18,12 +9,21 @@
     "collegeId": "col-103"
   },
   {
-    "id": "BJ_YGpBp_",
+    "id": "rkaP3LF6u",
     "email": "admin@admin",
     "password": "jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=",
     "firstName": "admin",
     "lastName": "admin",
     "role": "admin",
+    "collegeId": "col-103"
+  },
+  {
+    "id": "rybisdFTu",
+    "email": "jure.potok@gmail.com",
+    "password": "jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=",
+    "firstName": "Jure",
+    "lastName": "Potok",
+    "role": "user",
     "collegeId": "col-103"
   }
 ]

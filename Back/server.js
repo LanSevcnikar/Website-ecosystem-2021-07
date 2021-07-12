@@ -46,7 +46,9 @@ app.post('/login', (req, res) => {
       return;
    }
    
-   const token = jwt.sign({sub: user.id}, jwtSecret, { expiresIn: 20 });
+   // Set timer 
+   const token = jwt.sign({sub: user.id}, jwtSecret, { expiresIn: 35 });
+   console.info(token)
    res.send({token});
 });
 
