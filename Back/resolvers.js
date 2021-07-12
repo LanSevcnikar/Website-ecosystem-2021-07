@@ -15,6 +15,7 @@ const Query = {
     return db.students.list()
   },
   checkLoginStatus: (root, args, context, info) => {
+    console.info(context)
     if (!context.user) return false;
     return true;
   }

@@ -14,7 +14,10 @@
       "graphql-tools": "^3.1.1",
       "jshashes": "^1.0.8",
       "jsonwebtoken": "^8.5.1",
-      "notarealdb": "^0.2.2"
+      "notarealdb": "^0.2.2",
+      "passport": "^0.4.1",
+      "passport-jwt": "^4.0.0",
+      "rand-token": "^1.0.1"
    },
    "devDependencies": {
       "nodemon": "1.17.1"

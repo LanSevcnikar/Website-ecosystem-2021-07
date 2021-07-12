@@ -10,7 +10,7 @@ async function callAPI(url, data, token) {
     return response;
 }
 
-export default async function (data, token = "",  url = "http://localhost:9000/graphql") {
+export default async function (data, token = "",  url = "http://localhost:9000/api") {
     data = JSON.stringify(data);
     const res = await callAPI(url, data, token);
     const status = res.status;

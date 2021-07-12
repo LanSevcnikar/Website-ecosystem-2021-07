@@ -100,6 +100,9 @@ export default {
     } else {
       this.loggedIn = false;
     }
+    if(this.loggedIn == false){
+      localStorage.removeItem("jwtToken");
+    }
   },
   methods: {
     switchLoginSignUp: function () {
