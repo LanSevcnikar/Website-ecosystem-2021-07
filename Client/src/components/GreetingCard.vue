@@ -25,6 +25,7 @@
         You need to be logged in to see this
       </div>
     </div>
+    <button class="btn btn-primary m-3" @click="storeCookie"> Hello </button>
   </div>
 </template>
 
@@ -32,18 +33,7 @@
 
 <script>
 import callAPI from "../functions/callAPI";
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  useQuery,
-  gql
-} from "@apollo/client";
-
-const client = new ApolloClient({
-  uri: 'localhost:4000',
-  cache: new InMemoryCache()
-});
+import cookie from "js-cookie";
 
 export default {
   components: {},
@@ -68,6 +58,10 @@ export default {
         else alert("Response came back with status: ", res.status)
       }
     },
+    storeCookie: function(){
+      console.log("cookie")
+      cookie.set("token", "sometasdasdhingCOool", {expires: 1/24})
+    }
   },
 };
 </script>

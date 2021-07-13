@@ -1,13 +1,17 @@
 const db = require("./db");
 const jwt = require("jsonwebtoken");
 const notAuth = "Unauthorized";
+const cookie = require('js-cookie')
 const Hashes = require("jshashes");
 
 const secret = "somecoolsecretkey";
 
 //const Hashes = require('jshashes')
 const Query = {
-  greeting: () => "Greetings and salutations",
+  greeting: (root, args, context, info) => {
+    console.info("Hi")
+    return "Greetings and salutations"
+  },
   greetingAuth: (root, args, context, info) => {
     if (!context.user) throw new Error(notAuth);
     return "Greetings and salutations, " + context.user.firstName;
@@ -44,19 +48,22 @@ const Mutation = {
       collegeId: "col-103",
     });
   },
-  logInUser: async (root, args, {res}, info) => {
-    console.log(res)
+  logInUser: async (_, args, {res}) => {
     const email = args.email;
     const password = new Hashes.SHA256().b64(args.password);
     const user = db.students.list().find((user) => user.email === email);
-    console.info("Trying to login user with email ", email);
 
     if (!user) throw new Error("User does not exist");
     if (user.password != password) throw new Error("Incorect password");
 
-    const [token, refreshToken] = await createTokens(user, secret);
-    res.cookie("refresh-token", refreshToken);
-    res.cookie("access-token", token);
+
+    //const [accessToken, refreshToken] = await createTokens(user, secret);
+    const token = await jwt.sign({userId: user.id}, secret, {expiresIn: 120});
+    const refreshToken = await jwt.sign({userId: user.id}, secret, {expiresIn: 120});
+
+    
+    res.setcookie('refresh-token','sometokensomewhere')
+
     return {
       token,
       refreshToken,
