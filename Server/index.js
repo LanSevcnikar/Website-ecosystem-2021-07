@@ -6,7 +6,7 @@ const fs = require('fs');
 const typeDefs = fs.readFileSync('./schema.graphql', { encoding: 'utf-8' })
 const jwt = require("jsonwebtoken")
 
-const secret = "SomeSecret"
+const secret = "somecoolsecretkey"
 
 const server = new ApolloServer({
   typeDefs,

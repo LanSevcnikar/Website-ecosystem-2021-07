@@ -89,7 +89,7 @@ export default {
       loggedIn: false,
     };
   },
-  created: async function () {
+  created: async function() {
     if (localStorage.getItem("jwtToken")) {
       const data = { query: "{ checkLoginStatus }" };
       const jwttoken = localStorage.getItem("jwtToken");
@@ -100,21 +100,22 @@ export default {
     } else {
       this.loggedIn = false;
     }
-    if(this.loggedIn == false){
+    if (this.loggedIn == false) {
       //localStorage.removeItem("jwtToken");
     }
   },
   methods: {
-    switchLoginSignUp: function () {
+    switchLoginSignUp: function() {
       const pt = this.website;
       this.website = this.oppositeWebsite;
       this.oppositeWebsite = pt;
     },
-    logout: function () {
+    logout: function() {
       //localStorage.removeItem("jwtToken");
       this.loggedIn = false;
     },
-    checkForm: async function (e) {
+    checkForm: async function(e) {
+      e.preventDefault();
       const email = this.email;
       const password = this.password;
 
@@ -151,13 +152,33 @@ export default {
         }
         e.preventDefault();
       }
-      const data = { email, password };
-      const res = await callAPI(data, "", "http://localhost:9000/login");
-      try{
-        localStorage.setItem("jwtToken", res.data.token);
+
+      const data = {
+        query: `
+            mutation logInUser($logInUserEmail: String!, $logInUserPassword: String!){
+              logInUser(email: $logInUserEmail, password: $logInUserPassword) {
+                token,
+                refreshToken
+              }
+            }
+          `,
+        variables: {
+          logInUserEmail: email,
+          logInUserPassword: password,
+        },
+      };
+
+      const res = await callAPI(data, "");
+      try {
+        const token = res.data.data.logInUser.token;
+        const refreshToken = res.data.data.logInUser.refreshToken;
+        console.log(token,refreshToken)
+        localStorage.setItem("jwtToken", token);
         this.loggedIn = true;
-      }catch{
-        alert("Login failed")
+      } catch {
+        const error = res.data.errors[0].message
+        console.log(error)
+        alert("Login failed with error: " + error);
       }
       e.preventDefault();
     },

@@ -16,6 +16,7 @@
     "express": "^4.17.1",
     "graphql": "^15.5.1",
     "graphql-tools": "^7.0.5",
+    "jshashes": "^1.0.8",
     "jsonwebtoken": "^8.5.1",
     "nodemon": "^2.0.12",
     "notarealdb": "^0.2.2"

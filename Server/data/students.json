@@ -16,14 +16,5 @@
     "lastName": "admin",
     "role": "admin",
     "collegeId": "col-103"
-  },
-  {
-    "id": "rybisdFTu",
-    "email": "jure.potok@gmail.com",
-    "password": "jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=",
-    "firstName": "Jure",
-    "lastName": "Potok",
-    "role": "user",
-    "collegeId": "col-103"
   }
 ]

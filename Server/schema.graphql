@@ -8,7 +8,9 @@ type Query {
 
 type Mutation {
   deleteStudent(id: ID!): String
-  signUp(input:SignUpInput):String
+  signUp(input:SignUpInput!):String
+  logInUser(email: String!, password: String!): AuthPayload!
+  refreshTokens(token: String!, refreshToken: String!): AuthPayload!
 }
 
 input SignUpInput {
@@ -32,6 +34,11 @@ type Student {
   fullName: String
   college: College
   email: String
+}
+
+type AuthPayload {
+  token: String!
+  refreshToken: String!
 }
 
 #The exclamation mark means that the field is non nullable
