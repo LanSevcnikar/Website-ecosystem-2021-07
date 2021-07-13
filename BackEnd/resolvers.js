@@ -1,30 +1,24 @@
 const db = require("./db");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const notAuth = "Unauthorized";
-const Hashes = require('jshashes')
+const Hashes = require("jshashes");
 
-const secret = "somecoolsecretkey"
+const secret = "somecoolsecretkey";
 
 //const Hashes = require('jshashes')
 const Query = {
-  greeting: () => {
-    console.info("Greetings and salutations called")
-    return "Greetings and salutations"
-  },
+  greeting: () => "Greetings and salutations",
   greetingAuth: (root, args, context, info) => {
     if (!context.user) throw new Error(notAuth);
-    return (
-      "Greetings and salutations, " +
-      db.students.get(context.user.sub).firstName
-    );
+    return "Greetings and salutations, " + context.user.firstName;
   },
   getAllColleges: () => db.colleges.list(),
   getAllStudents: (root, args, context, info) => {
+    console.info("The students are being called")
     if (!context.user) throw new Error(notAuth);
     return db.students.list();
   },
   checkLoginStatus: (root, args, context, info) => {
-    console.info(context);
     if (!context.user) return false;
     return true;
   },
@@ -36,8 +30,7 @@ const Mutation = {
     console.info("Deleted a student with the ID: ", args.id);
     return db.students.delete(args.id);
   },
-  signUp: (root, args, context, info) => {
-    const st = { ...args };
+  signUpUser: (root, args, context, info) => {
     const user = db.students
       .list()
       .find((user) => user.email === args.input.email);
@@ -51,20 +44,23 @@ const Mutation = {
       collegeId: "col-103",
     });
   },
-  logInUser: async (root, args, context, info) => {
+  logInUser: async (root, args, {res}, info) => {
+    console.log(res)
     const email = args.email;
     const password = new Hashes.SHA256().b64(args.password);
     const user = db.students.list().find((user) => user.email === email);
-    console.info("Trying to login user with email ", email)
+    console.info("Trying to login user with email ", email);
 
-    if(!user) throw new Error('User does not exist');
-    if(user.password != password) throw new Error('Incorect password');
+    if (!user) throw new Error("User does not exist");
+    if (user.password != password) throw new Error("Incorect password");
 
     const [token, refreshToken] = await createTokens(user, secret);
+    res.cookie("refresh-token", refreshToken);
+    res.cookie("access-token", token);
     return {
       token,
-      refreshToken
-    }
+      refreshToken,
+    };
   },
 };
 
@@ -77,27 +73,27 @@ const Student = {
   },
 };
 
-
-const createTokens = async function (user, secret){
+const createTokens = async function (user, secret) {
   let userModel = { sub: user.id };
 
-  const refreshToken = await jwt.sign(userModel, secret, { expiresIn: 18 });
+  const refreshToken = await jwt.sign(userModel, secret, { expiresIn: 60 });
 
   // You can control how much of the data goes into the jwt
-  //It is readable by everyone and is thus importaint to protext user information 
+  //It is readable by everyone and is thus importaint to protext user information
   // Usually, you put in the id, the role and that is
   userModel = { ...db.students.get(user.id) };
 
-  const accessToken = await jwt.sign(userModel, secret, { expiresIn: 60 });
+  const accessToken = await jwt.sign(userModel, secret, { expiresIn: 18 });
 
   return [accessToken, refreshToken];
-}
-
+};
 
 const refresgTokens = async function (token, refreshToken, secret) {
   let userId = -1;
   try {
-    const { user: { id } } = jwt.verify(refreshToken, secret);
+    const {
+      user: { id },
+    } = jwt.verify(refreshToken, secret);
     userId = id;
   } catch (err) {
     return {};
@@ -111,7 +107,6 @@ const refresgTokens = async function (token, refreshToken, secret) {
     refreshToken: newRefreshToken,
     user,
   };
-}
-
+};
 
 module.exports = { Query, Mutation, Student };

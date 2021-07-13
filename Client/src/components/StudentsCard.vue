@@ -44,7 +44,6 @@ export default {
   },
   methods: {
     deleteMe: async function (index) {
-      const jwttoken = localStorage.getItem("jwtToken");
       const data = {
         query: `
             mutation deleteStudent($id:ID!){
@@ -56,13 +55,12 @@ export default {
         },
       };
 
-      await callAPI(data, jwttoken);
+      await callAPI(data);
       await this.getstudents();
     },
 
     getstudents: async function () {
       this.students = [];
-      const jwttoken = localStorage.getItem("jwtToken");
       const data = {
         query: `{
           getAllStudents {
@@ -75,7 +73,7 @@ export default {
           }
         }`,
       };
-      const res = await callAPI(data, jwttoken);
+      const res = await callAPI(data);
       if (res.data.errors) alert(res.data.errors[0].message);
       else {
         if (res.status == 200) {

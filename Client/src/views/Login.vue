@@ -90,19 +90,11 @@ export default {
     };
   },
   created: async function() {
-    if (localStorage.getItem("jwtToken")) {
-      const data = { query: "{ checkLoginStatus }" };
-      const jwttoken = localStorage.getItem("jwtToken");
-      const res = await callAPI(data, jwttoken);
-      console.log(res.status);
-      if (res.status == 401) this.loggedIn = false;
-      else this.loggedIn = res.data.data ? true : false;
-    } else {
-      this.loggedIn = false;
-    }
-    if (this.loggedIn == false) {
-      //localStorage.removeItem("jwtToken");
-    }
+    const data = { query: "{ checkLoginStatus }" };
+    const res = await callAPI(data);
+    if (res.status != 200) this.loggedIn = false;
+    else this.loggedIn = res.data.data.checkLoginStatus;
+    
   },
   methods: {
     switchLoginSignUp: function() {
@@ -129,12 +121,12 @@ export default {
         console.log(email, password, fname, lname);
         const data = {
           query: `
-            mutation signUp($input:SignUpInput) {
-              signUp(input:$input)
+            mutation signUp($signUpUserInput: SignUpInput!){
+              signUpUser(input: $signUpUserInput)
             }
           `,
           variables: {
-            input: {
+            signUpUserInput: {
               email: email,
               fname: fname,
               password: password,
@@ -168,16 +160,16 @@ export default {
         },
       };
 
-      const res = await callAPI(data, "");
+      const res = await callAPI(data);
       try {
         const token = res.data.data.logInUser.token;
         const refreshToken = res.data.data.logInUser.refreshToken;
-        console.log(token,refreshToken)
+        console.log(token, refreshToken);
         localStorage.setItem("jwtToken", token);
         this.loggedIn = true;
       } catch {
-        const error = res.data.errors[0].message
-        console.log(error)
+        const error = res.data.errors[0].message;
+        console.log(error);
         alert("Login failed with error: " + error);
       }
       e.preventDefault();

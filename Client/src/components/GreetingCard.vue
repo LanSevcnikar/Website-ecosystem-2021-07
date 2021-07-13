@@ -32,6 +32,18 @@
 
 <script>
 import callAPI from "../functions/callAPI";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  useQuery,
+  gql
+} from "@apollo/client";
+
+const client = new ApolloClient({
+  uri: 'localhost:4000',
+  cache: new InMemoryCache()
+});
 
 export default {
   components: {},
@@ -48,9 +60,8 @@ export default {
     },
     getGreetingAuth: async function () {
       const data = { query: "{ greetingAuth }" };
-      const jwttoken = localStorage.getItem("jwtToken");
 
-      const res = await callAPI(data, jwttoken);
+      const res = await callAPI(data);
       if(res.data.errors) alert(res.data.errors[0].message);
       else{
         if (res.status == 200) alert(res.data.data.greetingAuth);

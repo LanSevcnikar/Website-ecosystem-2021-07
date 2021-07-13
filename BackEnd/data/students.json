@@ -16,5 +16,23 @@
     "lastName": "admin",
     "role": "admin",
     "collegeId": "col-103"
+  },
+  {
+    "id": "B1JaS-jad",
+    "email": "jure.potok@gmail.com",
+    "password": "glUeHOT6z/CLj5y24Fj7YhIUWl4SACNctMycLhE8lsA=",
+    "firstName": "Jure",
+    "lastName": "Potok",
+    "role": "user",
+    "collegeId": "col-103"
+  },
+  {
+    "id": "HyxzIWoaO",
+    "email": "tim.skudnik@prva.si",
+    "password": "Tr5jYgdKHI0sXjo9mmsj612HwLq6KgMmgcqyu+VSLGc=",
+    "firstName": "Tim",
+    "lastName": "Skudnik",
+    "role": "user",
+    "collegeId": "col-103"
   }
 ]

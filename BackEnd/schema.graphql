@@ -8,7 +8,7 @@ type Query {
 
 type Mutation {
   deleteStudent(id: ID!): String
-  signUp(input:SignUpInput!):String
+  signUpUser(input:SignUpInput!):String
   logInUser(email: String!, password: String!): AuthPayload!
   refreshTokens(token: String!, refreshToken: String!): AuthPayload!
 }
