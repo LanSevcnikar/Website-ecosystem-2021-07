@@ -1,7 +1,6 @@
 const db = require("./db");
 const jwt = require("jsonwebtoken");
 const notAuth = "Unauthorized";
-const cookie = require('js-cookie')
 const Hashes = require("jshashes");
 
 const secret = "somecoolsecretkey";
@@ -9,14 +8,16 @@ const secret = "somecoolsecretkey";
 //const Hashes = require('jshashes')
 const Query = {
   greeting: (root, args, context, info) => {
-    console.info("Hi")
+    //context.res.header('something','somethingeseewra')
     return "Greetings and salutations"
   },
   greetingAuth: (root, args, context, info) => {
     if (!context.user) throw new Error(notAuth);
     return "Greetings and salutations, " + context.user.firstName;
   },
-  getAllColleges: () => db.colleges.list(),
+  getAllColleges: () => {
+    return db.colleges.list()
+  },
   getAllStudents: (root, args, context, info) => {
     console.info("The students are being called")
     if (!context.user) throw new Error(notAuth);
@@ -60,9 +61,6 @@ const Mutation = {
     //const [accessToken, refreshToken] = await createTokens(user, secret);
     const token = await jwt.sign({userId: user.id}, secret, {expiresIn: 120});
     const refreshToken = await jwt.sign({userId: user.id}, secret, {expiresIn: 120});
-
-    
-    res.setcookie('refresh-token','sometokensomewhere')
 
     return {
       token,

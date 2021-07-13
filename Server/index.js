@@ -5,16 +5,20 @@ const resolvers = require("./resolvers");
 const fs = require("fs");
 const typeDefs = fs.readFileSync("./schema.graphql", { encoding: "utf-8" });
 const jwt = require("jsonwebtoken");
+const cors = require("cors")
 
 const secret = "somecoolsecretkey";
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req } => { 
+  context: ({res}) => {
+    res.header('Authorization', 'value')
     
-    
-  }),
+  },
+  cors: {
+    exposedHeaders: ['Authorization', 'x-token', 'x-grant-type', 'Content-Type'],
+  },
 });
 
 server.listen().then(({ url }) => {

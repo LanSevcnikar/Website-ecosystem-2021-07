@@ -33,8 +33,6 @@
 
 <script>
 import callAPI from "../functions/callAPI";
-import cookie from "js-cookie";
-
 export default {
   components: {},
   data() {
@@ -46,7 +44,7 @@ export default {
     getGreeting: async function () {
       const data = { query: "{ greeting }" };
 
-      await callAPI(data).then((res) => alert(res.data.data.greeting));
+      await callAPI(data).then((res) => console.log(res));
     },
     getGreetingAuth: async function () {
       const data = { query: "{ greetingAuth }" };
@@ -58,10 +56,6 @@ export default {
         else alert("Response came back with status: ", res.status)
       }
     },
-    storeCookie: function(){
-      console.log("cookie")
-      cookie.set("token", "sometasdasdhingCOool", {expires: 1/24})
-    }
   },
 };
 </script>

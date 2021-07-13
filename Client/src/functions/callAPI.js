@@ -18,8 +18,8 @@ export default async function (data) {
     if(!refreshToken) refreshToken = ""
     data = JSON.stringify(data);
     const url = "http://localhost:4000/"
-    const res = await callAPI(url, data, token);
-    console.log(res.headers);
+    const res = await callAPI(url, data, token)
+    console.log(res)
     const status = res.status;
     const resdata = await res.json();
     return {status: status, data: resdata}; 
