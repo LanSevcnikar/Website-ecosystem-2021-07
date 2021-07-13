@@ -1,4 +1,5 @@
 async function callAPI(url, data, token, refreshToken) {
+  console.log(refreshToken)
     const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -12,13 +13,13 @@ async function callAPI(url, data, token, refreshToken) {
 }
 
 export default async function (data) {
-    let token = localStorage.getItem("jwtToken");
-    let refreshToken = localStorage.getItem("jwtTokenRefresh");
+    let token = localStorage.getItem("jwtAccessToken");
+    let refreshToken = localStorage.getItem("jwtRefreshToken");
     if(!token) token = ""
     if(!refreshToken) refreshToken = ""
     data = JSON.stringify(data);
-    const url = "http://localhost:4000/"
-    const res = await callAPI(url, data, token)
+    const url = "http://localhost:4000/graphql"
+    const res = await callAPI(url, data, token, refreshToken)
     console.log(res)
     const status = res.status;
     const resdata = await res.json();

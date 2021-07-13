@@ -1,0 +1,50 @@
+[
+  {
+    "id": "Hy-QXnrTu",
+    "email": "lan.sevcnikar@druga.si",
+    "password": "XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=",
+    "firstName": "Lan",
+    "lastName": "Sevcnikar",
+    "collegeId": "col-103"
+  },
+  {
+    "id": "SyqQQhrpd",
+    "email": "jure.potok@gmail.com",
+    "password": "XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=",
+    "firstName": "Jure",
+    "lastName": "Potok",
+    "collegeId": "col-102"
+  },
+  {
+    "id": "r19472Sad",
+    "email": "tim.skudnik@gmail.com",
+    "password": "1D9lqWuane/GgzhO0wtZtiRYPTMnp/mpo9gfIrMjHus=",
+    "firstName": "Tim",
+    "lastName": "Skudnik",
+    "collegeId": "col-101"
+  },
+  {
+    "id": "r11IQhBaO",
+    "email": "aljosa.sevcnikar@imagine.si",
+    "password": "jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=",
+    "firstName": "Aljosa",
+    "lastName": "Sevcnikar",
+    "collegeId": "col-101"
+  },
+  {
+    "id": "BkeP73SaO",
+    "email": "muhamed.ali@muhamed.ali",
+    "password": "6uDfpujXIjSpCc9aPmdObf3V5wecqnSW325A7q621/E=",
+    "firstName": "Muhamed",
+    "lastName": "Ali",
+    "collegeId": "col-102"
+  },
+  {
+    "id": "B1lOmhS6u",
+    "email": "admin@admin",
+    "password": "jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=",
+    "firstName": "admin",
+    "lastName": "admin",
+    "collegeId": "col-103"
+  }
+]

@@ -33,6 +33,7 @@
 
 <script>
 import callAPI from "../functions/callAPI";
+
 export default {
   components: {},
   data() {
@@ -43,8 +44,7 @@ export default {
   methods: {
     getGreeting: async function () {
       const data = { query: "{ greeting }" };
-
-      await callAPI(data).then((res) => console.log(res));
+      await callAPI(data).then((res) => alert(res.data.data.greeting));
     },
     getGreetingAuth: async function () {
       const data = { query: "{ greetingAuth }" };

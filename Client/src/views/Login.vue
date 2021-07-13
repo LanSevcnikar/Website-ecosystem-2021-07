@@ -107,6 +107,7 @@ export default {
       this.loggedIn = false;
     },
     checkForm: async function(e) {
+      console.log("APOI asdbeing called")
       e.preventDefault();
       const email = this.email;
       const password = this.password;
@@ -138,9 +139,6 @@ export default {
         const res = await callAPI(data);
         if (res.data.errors || res.status != 200) {
           alert("something went wrong");
-        } else {
-          localStorage.setItem("jwtToken", res.data.data.token);
-          this.loggedIn = true;
         }
         e.preventDefault();
       }
@@ -160,12 +158,19 @@ export default {
         },
       };
 
+
+      console.log("APOI being called")
       const res = await callAPI(data);
+      console.log(res);
       try {
         const token = res.data.data.logInUser.token;
         const refreshToken = res.data.data.logInUser.refreshToken;
+        console.log("123hi>")
         console.log(token, refreshToken);
-        localStorage.setItem("jwtToken", token);
+        localStorage.setItem("jwtAccessToken", token);
+        console.log("hi>")
+        localStorage.setItem("jwtRefreshToken", refreshToken);
+        console.log(localStorage.getItem("jwtRefreshToken"))
         this.loggedIn = true;
       } catch {
         const error = res.data.errors[0].message;

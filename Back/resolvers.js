@@ -1,10 +1,9 @@
 const db = require("./db");
 const jwt = require("jsonwebtoken");
-const { createTokens, refreshTokens } = require("./auth");
 const notAuth = "Unauthorized";
 const Hashes = require("jshashes");
 
-const secret = "ImagineJeFUlKulModel";
+const secret = "somecoolsecretkey";
 
 //const Hashes = require('jshashes')
 const Query = {
@@ -13,7 +12,6 @@ const Query = {
     return "Greetings and salutations"
   },
   greetingAuth: (root, args, context, info) => {
-    console.log(context)
     if (!context.user) throw new Error(notAuth);
     return "Greetings and salutations, " + context.user.firstName;
   },
@@ -51,23 +49,18 @@ const Mutation = {
       collegeId: "col-103",
     });
   },
-  logInUser: async (root, args, context, info) => {
+  logInUser: async (_, args, {res}) => {
     const email = args.email;
     const password = new Hashes.SHA256().b64(args.password);
     const user = db.students.list().find((user) => user.email === email);
-    console.info("doing login", password, user)
 
     if (!user) throw new Error("User does not exist");
     if (user.password != password) throw new Error("Incorect password");
 
 
     //const [accessToken, refreshToken] = await createTokens(user, secret);
-    const [token, refreshToken] = await createTokens(user);
-    console.log(token)
-    console.log('.')
-    console.log(refreshToken)
-
-    console.log("loginworked")
+    const token = await jwt.sign({userId: user.id}, secret, {expiresIn: 120});
+    const refreshToken = await jwt.sign({userId: user.id}, secret, {expiresIn: 120});
 
     return {
       token,
@@ -84,4 +77,41 @@ const Student = {
     return db.colleges.get(root.collegeId);
   },
 };
+
+const createTokens = async function (user, secret) {
+  let userModel = { id: user.id };
+
+  const refreshToken = await jwt.sign(userModel, secret, { expiresIn: 60 });
+
+  // You can control how much of the data goes into the jwt
+  //It is readable by everyone and is thus importaint to protext user information
+  // Usually, you put in the id, the role and that is
+  userModel = { ...db.students.get(user.id) };
+
+  const accessToken = await jwt.sign(userModel, secret, { expiresIn: 18 });
+
+  return [accessToken, refreshToken];
+};
+
+const refresgTokens = async function (token, refreshToken, secret) {
+  let userId = -1;
+  try {
+    const {
+      user: { id },
+    } = jwt.verify(refreshToken, secret);
+    userId = id;
+  } catch (err) {
+    return {};
+  }
+
+  const user = db.students.get(userId);
+
+  const [newToken, newRefreshToken] = await createTokens(user, SECRET);
+  return {
+    token: newToken,
+    refreshToken: newRefreshToken,
+    user,
+  };
+};
+
 module.exports = { Query, Mutation, Student };
