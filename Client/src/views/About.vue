@@ -1,18 +1,58 @@
 <template>
-  <div class="d-flex h-100 text-center">
-    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-      <main class="px-3">
-        <h1>Welcome.</h1>
-        <p class="lead">
-          This is just a quick run to see if this works, I hope you like it here
-        </p>
-      </main>
-    </div>
+  <div align="center">
+   <form @submit="checkForm" class="w-75 mt-3">
+      <div class="mb-3" align="left">
+        <label for="exampleInputEmail1" class="form-label">Email address</label>
+        <input
+          type="text"
+          class="form-control"
+          v-model="email"
+        />
+      </div>
+      <div class="mb-3" align="left">
+        <label for="exampleInputEmail1" class="form-label">First name</label>
+        <input
+          type="text"
+          class="form-control"
+          v-model="fname"
+        />
+      </div>
+      <div class="mb-3" align="left">
+        <label for="exampleInputEmail1" class="form-label">Last name</label>
+        <input
+          type="text"
+          class="form-control"
+          v-model="lname"
+        />
+      </div>
+     
+      
+    
+      <div class="row m-4">
+        <button type="submit" class="btn btn-primary"> Change </button>
+      </div>
+    </form>
+    <br />
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      email: "",
+      fname: "",
+      lname: "",
+      colid: "",
+    }
+  },
+  created: function(){
+    const userData = JSON.parse(localStorage.getItem("userData"))
+    this.email = userData.email;
+    this.fname = userData.firstName;
+    this.lname = userData.lastName;
+  },
+};
 </script>
 
 <style>

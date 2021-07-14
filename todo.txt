@@ -1,5 +1,8 @@
+Hashing and salting the passwords - hashing yes, salting no
+add levels to authentication - done
 public and private key - done
 refresh and access tokens - done
 logout / blacklisting tokens - done
 ability to check experation token client side - done
 add ACL to prevent wrong routing - done
+  fixed the bug where being on login page and trying to access a bad link fails

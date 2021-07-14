@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100%" >
     <ul class="nav nav-fill nav-pills">
       <li class="nav-item">
         <router-link to="/home" class="nav-link" aria-current="page">
@@ -22,8 +22,8 @@
         </router-link>
       </li>
     </ul>
-    <div class="container-fluid">
-      <router-view></router-view>
+    <div class="container-fluid" style="height: 100%" >
+      <router-view style="height: 100%"  ></router-view>
     </div>
   </div>
 </template>
@@ -44,5 +44,9 @@ export default {
 }
 .card-columns {
   column-count: 4;
+}
+
+#app {
+  height: 100vh;
 }
 </style>

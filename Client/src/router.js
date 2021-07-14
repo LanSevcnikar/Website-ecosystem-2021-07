@@ -19,15 +19,21 @@ const router = createRouter({
     linkActiveClass: "active",
 })
 
-router.beforeEach((to, _, next) => {
+router.beforeEach((to, from, next) => {
     const userData = JSON.parse(localStorage.getItem("userData"))
-    console.log(Math.floor(Date.now()/1000), userData.expires);
-    if (!userData.email || (Math.floor(Date.now()/1000) > userData.expires)) {
-        if(to.path == '/aboutme'){
-            return next({path:'/login'})
+    if (!userData.email || (Math.floor(Date.now() / 1000) > userData.expires)) {
+        if (to.path == '/aboutme') {
+            if(from.path == '/login'){
+                router.go();
+            }
+            return next({ path: '/login' })
         }
     }
     return next()
+})
+
+router.afterEach((to) => {
+    console.log(to)
 })
 
 //Suefl things that you might need are aliases (same thing called different things)
@@ -42,21 +48,21 @@ export default router;
 
 // router.beforeEach((to, _, next) => {
 //     const isLoggedIn = isUserLoggedIn()
-  
+
 //     if (!canNavigate(to)) {
 //       // Redirect to login if not logged in
 //       // ! We updated login route name here from `auth-login` to `login` in starter-kit
 //       if (!isLoggedIn) return next({ name: 'login' })
-  
+
 //       // If logged in => not authorized
 //       return next({ name: 'not-authorized' })
 //     }
-  
+
 //     // Redirect if logged in
 //     if (to.meta.redirectIfLoggedIn && isLoggedIn) {
 //       next(getHomeRouteForLoggedInUser())
 //     }
-  
+
 //     return next()
 //   })
 
