@@ -51,7 +51,7 @@ app.use(async (req, res, next) => {
     const user = await jwt.verify(accessToken, publickey, verifyOptions);
     console.log("The access token was still valid");
     req.user = { ...user, accessToken, refreshToken };
-    res.set('x-auth-success', "true");
+    res.set('x-auth-success', true);
     next();
   } catch {
     try {
@@ -59,7 +59,7 @@ app.use(async (req, res, next) => {
       const invalidatedThing = (db.invalidatedTokens.list().find((token) => token.token == refreshToken));
       if (invalidatedThing) {
         console.log("Token had been invalidated");
-        res.set('x-auth-success', "false");
+        res.set('x-auth-success', false);
         req.user = null;
         return next();
       }
@@ -68,11 +68,11 @@ app.use(async (req, res, next) => {
       req.user = { ...userData, accessToken, refreshToken };;
       res.set('x-token', newTokens.token);
       res.set('x-refresh-token', newTokens.refreshToken);
-      res.set('x-auth-success', "true");
+      res.set('x-auth-success', true);
       next();
     } catch {
       console.log("Neither token was valid, if either were present");
-      res.set('x-auth-success', "false");
+      res.set('x-auth-success', false);
       req.user = null;
       next();
     }

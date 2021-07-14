@@ -1,3 +1,6 @@
+
+import getUserJwt from "./getUserJwt";
+
 async function callAPI(url, data, token, refreshToken) {
     const response = await fetch(url, {
         method: "POST",
@@ -10,6 +13,7 @@ async function callAPI(url, data, token, refreshToken) {
     }).catch(() => "");
     return response;
 }
+
 
 export default async function (data) {
     let token = localStorage.getItem("jwtAccessToken");
@@ -24,14 +28,16 @@ export default async function (data) {
     const newAccessToken = res.headers.get('x-token') || "";
     const newRefreshToken = res.headers.get('x-refresh-token') || "";
     const authSuccess = res.headers.get('x-auth-success');
-    if(authSuccess){
+    if(authSuccess == 'true'){
         if(newAccessToken){
             localStorage.setItem("jwtAccessToken", newAccessToken);
             localStorage.setItem("jwtRefreshToken", newRefreshToken);
         }
+        getUserJwt();
     }else{
         localStorage.setItem("jwtAccessToken", "");
         localStorage.setItem("jwtRefreshToken", "");
+        localStorage.setItem("userData", JSON.stringify({}));
     }
 
     

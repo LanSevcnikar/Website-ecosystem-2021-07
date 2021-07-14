@@ -14,7 +14,7 @@ const signOptions = {
 
 async function createTokens(user) {
   const userModelRefresh = { id: user.id };
-  const refreshToken = await jwt.sign(userModelRefresh, privatekey, { ...signOptions, expiresIn: 120 });
+  const refreshToken = await jwt.sign(userModelRefresh, privatekey, { ...signOptions, expiresIn: 30 });
 
   const userModelAccess = { ...user };
   const accessToken = await jwt.sign(userModelAccess, privatekey, {  ...signOptions, expiresIn: 7 });

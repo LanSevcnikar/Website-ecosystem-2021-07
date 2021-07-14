@@ -76,6 +76,8 @@
 
 <script>
 import callAPI from "../functions/callAPI";
+import getUserJwt from "../functions/getUserJwt";
+
 
 export default {
   data() {
@@ -175,6 +177,7 @@ export default {
         const refreshToken = res.data.data.logInUser.refreshToken;
         localStorage.setItem("jwtAccessToken", token);
         localStorage.setItem("jwtRefreshToken", refreshToken);
+        getUserJwt();
         this.loggedIn = true;
       } catch {
         const error = res.data.errors[0].message;
