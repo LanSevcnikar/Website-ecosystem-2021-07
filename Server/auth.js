@@ -1,16 +1,23 @@
 const db = require("./db");
 const jwt = require("jsonwebtoken");
+const fs = require('fs');
 require("dotenv").config();
 
 
-const jwtSecret = "ImagineJeFUlKulModel";
+const privatekey = fs.readFileSync('./keys/private.key', 'utf8');
+const publickey = fs.readFileSync('./keys/public.key', 'utf8');
+
+const signOptions = {
+  issuer: "Lan's code",
+  algorithm: "RS256"
+}
 
 async function createTokens(user) {
   const userModelRefresh = { id: user.id };
-  const refreshToken = await jwt.sign(userModelRefresh, jwtSecret, { expiresIn: 120 });
+  const refreshToken = await jwt.sign(userModelRefresh, privatekey, { ...signOptions, expiresIn: 120 });
 
   const userModelAccess = { ...user };
-  const accessToken = await jwt.sign(userModelAccess, jwtSecret, { expiresIn: 7 });
+  const accessToken = await jwt.sign(userModelAccess, privatekey, {  ...signOptions, expiresIn: 7 });
 
   return [accessToken, refreshToken, userModelAccess];
 };
