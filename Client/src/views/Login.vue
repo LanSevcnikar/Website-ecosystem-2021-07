@@ -102,12 +102,18 @@ export default {
       this.website = this.oppositeWebsite;
       this.oppositeWebsite = pt;
     },
-    logout: function() {
-      //localStorage.removeItem("jwtToken");
+    logout: async function() {
+       const data = {
+        query: `
+            mutation InvalidateTokenMutation {
+              invalidateToken
+            }
+          `,
+      };
+      await callAPI(data);
       this.loggedIn = false;
     },
     checkForm: async function(e) {
-      console.log("APOI asdbeing called")
       e.preventDefault();
       const email = this.email;
       const password = this.password;
@@ -115,7 +121,6 @@ export default {
       this.email = this.password = "";
 
       if (this.website == "Signup") {
-        console.log("Startting signup process");
         const fname = this.fname;
         const lname = this.lname;
         this.fname = this.lname = "";
@@ -159,18 +164,13 @@ export default {
       };
 
 
-      console.log("APOI being called")
       const res = await callAPI(data);
-      console.log(res);
+
       try {
         const token = res.data.data.logInUser.token;
         const refreshToken = res.data.data.logInUser.refreshToken;
-        console.log("123hi>")
-        console.log(token, refreshToken);
         localStorage.setItem("jwtAccessToken", token);
-        console.log("hi>")
         localStorage.setItem("jwtRefreshToken", refreshToken);
-        console.log(localStorage.getItem("jwtRefreshToken"))
         this.loggedIn = true;
       } catch {
         const error = res.data.errors[0].message;

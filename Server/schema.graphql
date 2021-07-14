@@ -11,6 +11,7 @@ type Mutation {
   signUpUser(input:SignUpInput!):String
   logInUser(email: String!, password: String!): AuthPayload!
   refreshTokens(token: String!, refreshToken: String!): AuthPayload!
+  invalidateToken: Boolean
 }
 
 input SignUpInput {

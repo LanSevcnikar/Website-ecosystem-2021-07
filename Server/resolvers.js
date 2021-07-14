@@ -13,7 +13,6 @@ const Query = {
     return "Greetings and salutations"
   },
   greetingAuth: (root, args, context, info) => {
-    console.log(context)
     if (!context.user) throw new Error(notAuth);
     return "Greetings and salutations, " + context.user.firstName;
   },
@@ -21,7 +20,6 @@ const Query = {
     return db.colleges.list()
   },
   getAllStudents: (root, args, context, info) => {
-    console.info("The students are being called")
     if (!context.user) throw new Error(notAuth);
     return db.students.list();
   },
@@ -34,7 +32,6 @@ const Query = {
 const Mutation = {
   deleteStudent: (root, args, context, info) => {
     if (!context.user || context.user.role != "admin") throw new Error(notAuth);
-    console.info("Deleted a student with the ID: ", args.id);
     return db.students.delete(args.id);
   },
   signUpUser: (root, args, context, info) => {
@@ -55,7 +52,6 @@ const Mutation = {
     const email = args.email;
     const password = new Hashes.SHA256().b64(args.password);
     const user = db.students.list().find((user) => user.email === email);
-    console.info("doing login", password, user)
 
     if (!user) throw new Error("User does not exist");
     if (user.password != password) throw new Error("Incorect password");
@@ -63,17 +59,16 @@ const Mutation = {
 
     //const [accessToken, refreshToken] = await createTokens(user, secret);
     const [token, refreshToken] = await createTokens(user);
-    console.log(token)
-    console.log('.')
-    console.log(refreshToken)
-
-    console.log("loginworked")
 
     return {
       token,
       refreshToken,
     };
   },
+  invalidateToken: (root, args, context, info) => {
+    if (!context.user) throw new Error("There is no user to unauthenticate");
+    db.invalidatedTokens.create({token: context.user.refreshToken})
+  }
 };
 
 const Student = {

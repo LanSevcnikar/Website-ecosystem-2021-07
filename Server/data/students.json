@@ -25,14 +25,5 @@
     "lastName": "Potok",
     "role": "user",
     "collegeId": "col-103"
-  },
-  {
-    "id": "HyxzIWoaO",
-    "email": "tim.skudnik@prva.si",
-    "password": "Tr5jYgdKHI0sXjo9mmsj612HwLq6KgMmgcqyu+VSLGc=",
-    "firstName": "Tim",
-    "lastName": "Skudnik",
-    "role": "user",
-    "collegeId": "col-103"
   }
 ]
