@@ -89,21 +89,20 @@ export default {
       loggedIn: false,
     };
   },
-  created: async function() {
+  created: async function () {
     const data = { query: "{ checkLoginStatus }" };
     const res = await callAPI(data);
     if (res.status != 200) this.loggedIn = false;
     else this.loggedIn = res.data.data.checkLoginStatus;
-    
   },
   methods: {
-    switchLoginSignUp: function() {
+    switchLoginSignUp: function () {
       const pt = this.website;
       this.website = this.oppositeWebsite;
       this.oppositeWebsite = pt;
     },
-    logout: async function() {
-       const data = {
+    logout: async function () {
+      const data = {
         query: `
             mutation InvalidateTokenMutation {
               invalidateToken
@@ -111,9 +110,15 @@ export default {
           `,
       };
       await callAPI(data);
+
+      // THis makes more sense but makes the app look less advanced than it actually is
+
+      localStorage.setItem("jwtAccessToken", "");
+      localStorage.setItem("jwtRefreshToken", "");
+
       this.loggedIn = false;
     },
-    checkForm: async function(e) {
+    checkForm: async function (e) {
       e.preventDefault();
       const email = this.email;
       const password = this.password;
@@ -162,7 +167,6 @@ export default {
           logInUserPassword: password,
         },
       };
-
 
       const res = await callAPI(data);
 

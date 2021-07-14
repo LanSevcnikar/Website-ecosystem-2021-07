@@ -2,7 +2,6 @@ const express = require("express");
 const db = require("./db");
 const { ApolloServer } = require("apollo-server-express");
 const { importSchema } = require("graphql-import");
-const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const { createTokens, refreshTokens } = require("./auth");
@@ -32,7 +31,6 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(cookieParser());//add async
 
 app.use(async (req, res, next) => {
   // Code that is excecuted before login thing is varified
