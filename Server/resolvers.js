@@ -75,7 +75,7 @@ const Student = {
   fullName: (root, args, context, info) => {
     return root.firstName + " " + root.lastName;
   },
-  college: (root) => {
+  college: (root) => {  //Using root here
     return db.colleges.get(root.collegeId);
   },
 };

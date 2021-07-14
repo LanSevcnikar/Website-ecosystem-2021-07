@@ -6,13 +6,17 @@
         <p class="lead">
           This is just a quick run to see if this works, I hope you like it here
         </p>
+        <p>
+          {{ getCounter }}
+        </p>
       </main>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapGetters } from "vuex";
+export default { computed: mapGetters(["getCounter"]) };
 </script>
 
 <style>
