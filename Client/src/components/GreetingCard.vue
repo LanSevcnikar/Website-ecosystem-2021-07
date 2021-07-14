@@ -25,7 +25,7 @@
         You need to be logged in to see this
       </div>
     </div>
-    <button class="btn btn-primary m-3" @click="storeCookie"> Hello </button>
+    <button class="btn btn-primary m-3" @click="increment"> {{ getCounter}} </button>
   </div>
 </template>
 
@@ -33,6 +33,8 @@
 
 <script>
 import callAPI from "../functions/callAPI";
+import {mapGetters} from 'vuex'
+import {store} from '../store'
 
 export default {
   components: {},
@@ -41,6 +43,7 @@ export default {
       reminder: false,
     };
   },
+  computed: mapGetters(['getCounter']),
   methods: {
     getGreeting: async function () {
       const data = { query: "{ greeting }" };
@@ -56,6 +59,9 @@ export default {
         else alert("Response came back with status: ", res.status)
       }
     },
+    increment: function (){
+      store.commit("increment");
+    }
   },
 };
 </script>

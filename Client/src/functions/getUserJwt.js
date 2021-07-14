@@ -22,4 +22,7 @@ export default function () {
     college: decodeAcc.college,
   }
   localStorage.setItem("userData", JSON.stringify(userData));
+  
+  const dTime = decodeRef.exp - decodeRef.iat;
+  return dTime;
 }

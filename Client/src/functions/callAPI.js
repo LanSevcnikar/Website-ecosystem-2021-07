@@ -33,7 +33,8 @@ export default async function (data) {
             localStorage.setItem("jwtAccessToken", newAccessToken);
             localStorage.setItem("jwtRefreshToken", newRefreshToken);
         }
-        getUserJwt();
+        const dTime = getUserJwt();
+        console.log(dTime)
     }else{
         localStorage.setItem("jwtAccessToken", "");
         localStorage.setItem("jwtRefreshToken", "");

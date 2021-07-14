@@ -198,7 +198,8 @@ export default {
         const refreshToken = res.data.data.logInUser.refreshToken;
         localStorage.setItem("jwtAccessToken", token);
         localStorage.setItem("jwtRefreshToken", refreshToken);
-        getUserJwt();
+        const dTime = getUserJwt();
+        console.log(dTime)
         this.loggedIn = true;
       } catch {
         const error = res.data.errors[0].message;

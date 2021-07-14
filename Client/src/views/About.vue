@@ -1,5 +1,8 @@
 <template>
   <div align="center">
+    Simply put, this website is badly created.
+    The check is done client side so it does not extend the access token and at the same time blah blah blah
+    This fix is simple but it is made as a proof of concept 
    <form @submit="checkForm" class="w-75 mt-3">
       <div class="mb-3" align="left">
         <label for="exampleInputEmail1" class="form-label">Email address</label>
@@ -51,6 +54,7 @@ export default {
     this.email = userData.email;
     this.fname = userData.firstName;
     this.lname = userData.lastName;
+    
   },
 };
 </script>
