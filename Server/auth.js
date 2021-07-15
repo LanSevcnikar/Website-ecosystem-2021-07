@@ -1,7 +1,6 @@
 const db = require("./db");
 const jwt = require("jsonwebtoken");
 const fs = require('fs');
-require("dotenv").config();
 
 
 const privatekey = fs.readFileSync('./keys/private.key', 'utf8');

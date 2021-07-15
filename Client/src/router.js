@@ -21,7 +21,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const userData = JSON.parse(localStorage.getItem("userData"))
-    if (!userData.email || (Math.floor(Date.now() / 1000) > userData.expires)) {
+    if (!userData || !userData.email || (Math.floor(Date.now() / 1000) > userData.expires)) {
         if (to.path == '/aboutme') {
             if(from.path == '/login'){
                 router.go();
