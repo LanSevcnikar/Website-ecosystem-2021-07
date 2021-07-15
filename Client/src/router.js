@@ -32,10 +32,6 @@ router.beforeEach((to, from, next) => {
     return next()
 })
 
-router.afterEach((to) => {
-    console.log(to)
-})
-
 //Suefl things that you might need are aliases (same thing called different things)
 //And maybe it would be smart to use redirects
 //You can also just name components

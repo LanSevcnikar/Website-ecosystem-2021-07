@@ -1,4 +1,5 @@
 const db = require("./db");
+
 const jwt = require("jsonwebtoken");
 const { createTokens, refreshTokens } = require("./auth");
 const notAuth = "Unauthorized";
@@ -8,20 +9,34 @@ const secret = "ImagineJeFUlKulModel";
 
 //const Hashes = require('jshashes')
 const Query = {
-  greeting: (root, args, context, info) => {
-    //context.res.header('something','somethingeseewra')
-    return "Greetings and salutations"
+  greeting: async function (root, args, context, info) {
+    return "Greetings and salutations";
   },
   greetingAuth: (root, args, context, info) => {
     if (!context.user) throw new Error(notAuth);
     return "Greetings and salutations, " + context.user.firstName;
   },
-  getAllColleges: () => {
-    return db.colleges.list()
+  getAllColleges: async function (root, args, context, info) {
+    const colleges = await context.pg.query("select * from colleges");
+    let colleges2 = [];
+    colleges.rows.forEach((element) => {
+      colleges2.push(element);
+    });
+    return colleges2;
   },
-  getAllStudents: (root, args, context, info) => {
+  getAllStudents: async function (root, args, context, info) {
     if (!context.user) throw new Error(notAuth);
-    return db.students.list();
+    const students = await context.pg.query("select * from students");
+    let students3 = [];
+    students.rows.forEach((element) => {
+      students3.push({
+        ...element,
+        firstName: element.first_name,
+        lastName: element.last_name,
+        collegeId: element.college_id,
+      });
+    });
+    return students3;
   },
   checkLoginStatus: (root, args, context, info) => {
     if (!context.user) return false;
@@ -56,7 +71,6 @@ const Mutation = {
     if (!user) throw new Error("User does not exist");
     if (user.password != password) throw new Error("Incorect password");
 
-
     //const [accessToken, refreshToken] = await createTokens(user, secret);
     const [token, refreshToken] = await createTokens(user);
 
@@ -67,16 +81,22 @@ const Mutation = {
   },
   invalidateToken: (root, args, context, info) => {
     if (!context.user) throw new Error("There is no user to unauthenticate");
-    db.invalidatedTokens.create({token: context.user.refreshToken})
-  }
+    db.invalidatedTokens.create({ token: context.user.refreshToken });
+  },
 };
 
 const Student = {
   fullName: (root, args, context, info) => {
     return root.firstName + " " + root.lastName;
   },
-  college: (root) => {  //Using root here
-    return db.colleges.get(root.collegeId);
+  college: async (root, args, context, info) => {
+    //Using root here
+    const collegeId = root.collegeId;
+    const college = await context.pg.query(
+      "select distinct * from colleges where id =" + collegeId
+    );
+    console.log(college.rows[0].name);
+    return college.rows[0];
   },
 };
 module.exports = { Query, Mutation, Student };

@@ -25,7 +25,8 @@
     "jshashes": "^1.0.8",
     "jsonwebtoken": "^8.5.1",
     "nodemon": "^2.0.12",
-    "notarealdb": "^0.2.2"
+    "notarealdb": "^0.2.2",
+    "pg": "^8.6.0"
   },
   "rules": {
     "no-unused-vars": "off"

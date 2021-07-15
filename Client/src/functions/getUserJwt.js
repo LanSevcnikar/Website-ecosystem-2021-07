@@ -12,7 +12,6 @@ export default function () {
   const tempTokenAcc = localStorage.getItem("jwtAccessToken");
   const tempTokenRef = localStorage.getItem("jwtRefreshToken");
   const decodeAcc = parseJwt(tempTokenAcc);
-  console.log(decodeAcc)
   const decodeRef = parseJwt(tempTokenRef);
   const userData = {
     email: decodeAcc.email,

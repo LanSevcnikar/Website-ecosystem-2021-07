@@ -11,7 +11,6 @@ export const store = createStore({
   },
   mutations: {
     increment (state) { 
-      console.log("Calling increment")
       state.count++
      },
   }

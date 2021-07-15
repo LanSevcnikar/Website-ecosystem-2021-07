@@ -25,6 +25,7 @@ export default async function (data) {
     const res = await callAPI(url, data, token, refreshToken)
     const status = res.status;
     const resdata = await res.json();
+    console.log(resdata)
     const newAccessToken = res.headers.get('x-token') || "";
     const newRefreshToken = res.headers.get('x-refresh-token') || "";
     const authSuccess = res.headers.get('x-auth-success');

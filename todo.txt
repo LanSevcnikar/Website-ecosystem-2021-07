@@ -25,5 +25,5 @@ https://www.youtube.com/watch?v=WB_XkqMzrhE
 https://www.youtube.com/watch?v=XpR7p71PE0I
 
 POSTGRES
-
+Use the VSC tools (SQLTools, a driver...)
 https://youtu.be/tp_5c6jaNQE 
