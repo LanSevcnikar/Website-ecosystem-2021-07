@@ -1,20 +1,15 @@
-const db = require("./db");
-
-const jwt = require("jsonwebtoken");
-const { createTokens, refreshTokens } = require("./auth");
+const { createTokens } = require("./auth");
 const notAuth = "Unauthorized";
 const Hashes = require("jshashes");
 
-const secret = "ImagineJeFUlKulModel";
-
 //const Hashes = require('jshashes')
 const Query = {
-  greeting: async function (root, args, context, info) {
+  greeting: (root, args, context, info) => {
     return "Greetings and salutations";
   },
   greetingAuth: (root, args, context, info) => {
     if (!context.user) throw new Error(notAuth);
-    return "Greetings and salutations, " + context.user.firstName;
+    return "Greetings and salutations, " + context.user.first_name;
   },
   getAllColleges: async function (root, args, context, info) {
     const colleges = await context.pg.query("select * from colleges");
@@ -45,33 +40,29 @@ const Query = {
 };
 
 const Mutation = {
-  deleteStudent: (root, args, context, info) => {
+  deleteStudent: async function (root, args, context, info) {
     if (!context.user || context.user.role != "admin") throw new Error(notAuth);
-    return db.students.delete(args.id);
+    const tempConst = await context.pg.query('delete from students where id = $1', [args.id]);
+    return 'Deleted student';
   },
-  signUpUser: (root, args, context, info) => {
-    const user = db.students
-      .list()
-      .find((user) => user.email === args.input.email);
-    if (user) return db.students.get(user);
-    return db.students.create({
-      email: args.input.email,
-      password: new Hashes.SHA256().b64(args.input.password),
-      firstName: args.input.fname,
-      lastName: args.input.lname,
-      role: "user",
-      collegeId: "col-103",
-    });
+  signUpUser: async function (root, args, context, info) {
+    const user = await context.pg.query('select * from students where email = $1', [args.input.email]);
+    if (user.rows.length > 0) throw new Error('User with same email already exists');
+    const queryText = 'insert into students(first_name, last_name, email, password, role, college_id) values($1,$2,$3,$4,$5,$6) returning *';
+    const queryValues = [args.input.fname, args.input.lname, args.input.email, new Hashes.SHA256().b64(args.input.password), "user", 3];
+    const newUser = await context.pg.query(queryText, queryValues)
+    if (newUser.rows.length > 0) return 'Success';
+    throw new Error('Something went wrong');
   },
   logInUser: async (root, args, context, info) => {
     const email = args.email;
     const password = new Hashes.SHA256().b64(args.password);
-    const user = db.students.list().find((user) => user.email === email);
+
+    const userQuery = await context.pg.query('select * from students where email = $1', [email]);
+    const user = userQuery.rows[0];
 
     if (!user) throw new Error("User does not exist");
     if (user.password != password) throw new Error("Incorect password");
-
-    //const [accessToken, refreshToken] = await createTokens(user, secret);
     const [token, refreshToken] = await createTokens(user);
 
     return {
@@ -79,9 +70,13 @@ const Mutation = {
       refreshToken,
     };
   },
-  invalidateToken: (root, args, context, info) => {
+  invalidateToken: async (root, args, context, info) => {
     if (!context.user) throw new Error("There is no user to unauthenticate");
-    db.invalidatedTokens.create({ token: context.user.refreshToken });
+    const queryText = 'insert into invalid_tokens(token) values($1) returning *';
+    const queryValues = [context.user.refreshToken];
+    const newUser = await context.pg.query(queryText, queryValues)
+    if(newUser.rows.length>0) return true;
+    return false;
   },
 };
 
@@ -95,7 +90,6 @@ const Student = {
     const college = await context.pg.query(
       "select distinct * from colleges where id =" + collegeId
     );
-    console.log(college.rows[0].name);
     return college.rows[0];
   },
 };

@@ -15,8 +15,8 @@ export default function () {
   const decodeRef = parseJwt(tempTokenRef);
   const userData = {
     email: decodeAcc.email,
-    firstName: decodeAcc.firstName,
-    lastName: decodeAcc.lastName,
+    firstName: decodeAcc.first_name,
+    lastName: decodeAcc.last_name,
     expires: decodeRef.exp,
     college: decodeAcc.college,
   }

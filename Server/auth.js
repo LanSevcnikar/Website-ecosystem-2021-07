@@ -1,4 +1,3 @@
-const db = require("./db");
 const jwt = require("jsonwebtoken");
 const fs = require('fs');
 
@@ -20,9 +19,9 @@ async function createTokens(user) {
   return [accessToken, refreshToken, userModelAccess];
 };
 
-async function refreshTokens(userId) {
-  const user = db.students.get(userId);
-
+async function refreshTokens(userId, pg) {
+  const tempConst = await pg.query('select * from students where id = $1', [userId]);
+  const user = tempConst.rows[0]
   const [newAccessToken, newRefreshToken, userModelAccess] = await createTokens(user);
   return [{
     token: newAccessToken,

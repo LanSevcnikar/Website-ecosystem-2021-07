@@ -1,12 +1,10 @@
 const express = require("express");
-const db = require("./db");
 const fs = require("fs");
 const { ApolloServer } = require("apollo-server-express");
 const { importSchema } = require("graphql-import");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
-const { createTokens, refreshTokens } = require("./auth");
-require("dotenv").config();
+const { refreshTokens } = require("./auth");
 
 const { Client } = require("pg");
 const pgClient = new Client({
@@ -76,17 +74,16 @@ app.use(async (req, res, next) => {
   } catch {
     try {
       const user = await jwt.verify(refreshToken, publickey, verifyOptions);
-      const invalidatedThing = db.invalidatedTokens
-        .list()
-        .find((token) => token.token == refreshToken);
-      if (invalidatedThing) {
+      const invalid_token = await pgClient.query('select * from invalid_tokens where token = $1', [refreshToken]);
+      console.log(invalid_token.rows)
+      if (invalid_token.rows.length > 0) {
         console.log("Token had been invalidated");
         res.set("x-auth-success", false);
         req.user = null;
         return next();
       }
       console.log("The refresh token was still valid but the access was not");
-      const [newTokens, userData] = await refreshTokens(user.id);
+      const [newTokens, userData] = await refreshTokens(user.id, pgClient);
       req.user = { ...userData, accessToken, refreshToken };
       res.set("x-token", newTokens.token);
       res.set("x-refresh-token", newTokens.refreshToken);
@@ -106,11 +103,6 @@ app.use(async (req, res, next) => {
 });
 
 const startServer = async function () {
-  db.invalidatedTokens.list().forEach((thing) => {
-    const id = thing.id;
-    const token = thing.token;
-  });
-
   await server.start();
 
   server.applyMiddleware({
