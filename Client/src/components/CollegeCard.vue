@@ -39,19 +39,22 @@ export default {
     getcollages: async function () {
       this.colleges = [];
       const data = {
-        query: `{
-          getAllColleges {
-            name
-            location
-            rating
+        query: `
+          query MyQuery {
+            colleges {
+              name
+              location
+              rating
+            }
           }
-        }`,
+
+        `,
       };
       const res = await callAPI(data);
       if (res.data.errors) alert(res.data.errors[0].message);
       else {
         if (res.status == 200) {
-          res.data.data.getAllColleges.forEach((coll) => {
+          res.data.data.colleges.forEach((coll) => {
             this.colleges.push(coll);
           });
         } else alert("Response came back with status: ", res.status);

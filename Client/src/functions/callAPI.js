@@ -2,26 +2,28 @@
 import getUserJwt from "./getUserJwt";
 
 async function callAPI(url, data, token, refreshToken) {
-    const response = await fetch(url, {
+    let payload = {
         method: "POST",
         headers: {
-            authorization: token,
             'x-grant-type': refreshToken,
             "Content-Type": "application/json",
         },
         body: data,
-    }).catch(() => "");
+    };
+    if(token){
+        payload.headers.authorization = "Bearer " + token;
+    }
+    const response = await fetch(url, payload).catch(() => "");
     return response;
 }
 
 
-export default async function (data) {
+export default async function (data, url="https://first-testing.hasura.app/v1/graphql") {
     let token = localStorage.getItem("jwtAccessToken");
     let refreshToken = localStorage.getItem("jwtRefreshToken");
     if(!token) token = ""
     if(!refreshToken) refreshToken = ""
     data = JSON.stringify(data);
-    const url = "http://localhost:4000/graphql"
     const res = await callAPI(url, data, token, refreshToken)
     const status = res.status;
     const resdata = await res.json();
@@ -37,9 +39,9 @@ export default async function (data) {
         const dTime = getUserJwt();
         console.log(dTime)
     }else{
-        localStorage.setItem("jwtAccessToken", "");
-        localStorage.setItem("jwtRefreshToken", "");
-        localStorage.setItem("userData", JSON.stringify({}));
+        //localStorage.setItem("jwtAccessToken", "");
+        //localStorage.setItem("jwtRefreshToken", "");
+        //localStorage.setItem("userData", JSON.stringify({}));
     }
 
     

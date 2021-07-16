@@ -1,7 +1,7 @@
 <template style="height: 100%" >
   <div class="h-100 asd">
     <div align="center">
-      <div style="display: table" class="h-100 w-25" >
+      <div style="display: table" class="h-100 w-50" >
         <div
           class="card m-3 p-3 "
         >
@@ -114,7 +114,7 @@ export default {
   },
   created: async function () {
     const data = { query: "{ checkLoginStatus }" };
-    const res = await callAPI(data);
+    const res = await callAPI(data, "http://localhost:4000/graphql");
     if (res.status != 200) this.loggedIn = false;
     else this.loggedIn = res.data.data.checkLoginStatus;
   },
@@ -191,7 +191,7 @@ export default {
         },
       };
 
-      const res = await callAPI(data);
+      const res = await callAPI(data, "http://localhost:4000/graphql");
 
       try {
         const token = res.data.data.logInUser.token;

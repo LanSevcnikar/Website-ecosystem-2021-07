@@ -8,7 +8,7 @@ const { refreshTokens } = require("./auth");
 
 const { Client } = require("pg");
 const pgClient = new Client({
-  host: "localhost",
+  host: "192.168.248.107",
   port: 5432,
   database: "test",
   user: "postgres",
@@ -66,7 +66,7 @@ app.use(async (req, res, next) => {
 });
 
 app.use(async (req, res, next) => {
-
+  console.log('THis server is being called')
   // THis entire thing gets the tokens from the headers and validates them with the public key
   //First, it tried the access token, if that throws an error, it tries the refresh token, that can either throw and error or turout to be invalidated
 

@@ -44,10 +44,13 @@ export default {
   },
   methods: {
     deleteMe: async function (index) {
+      console.log(index, this.students[index])
       const data = {
         query: `
-            mutation deleteStudent($id:ID!){
-              deleteStudent(id:$id)
+            mutation MyMutation($id: bigint = -1) {
+              delete_students_by_pk(id: $id) {
+                id
+              }
             }
           `,
         variables: {
@@ -62,23 +65,28 @@ export default {
     getstudents: async function () {
       this.students = [];
       const data = {
-        query: `{
-          getAllStudents {
-            fullName
+        query: `
+        query MyQuery {
+          students(order_by: {last_name: asc}) {
+            first_name
+            last_name
             email
             id
-            college {
+            StudentsSchool {
               name
             }
           }
-        }`,
+        }
+
+        `,
       };
       const res = await callAPI(data);
       if (res.data.errors) alert(res.data.errors[0].message);
       else {
         if (res.status == 200) {
-          res.data.data.getAllStudents.forEach((coll) => {
-            const fullName = coll.fullName;
+          res.data.data.students.forEach((coll) => {
+            //console.log(coll)
+            const fullName = coll.first_name + " " + coll.last_name;
             const uni = coll.college ? coll.college.name : "";
             this.students.push({
               fullName: fullName,
