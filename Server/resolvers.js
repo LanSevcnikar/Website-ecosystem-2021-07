@@ -1,8 +1,11 @@
 const { createTokens } = require("./auth");
-const notAuth = "Unauthorized";
 const Hashes = require("jshashes");
 
-//const Hashes = require('jshashes')
+const notAuth = "Unauthorized";
+
+// All possible queries
+// if (!context.user) just checks if  the user exists in the currect context (index.js sets that)
+
 const Query = {
   greeting: (root, args, context, info) => {
     return "Greetings and salutations";
@@ -30,7 +33,7 @@ const Query = {
         lastName: element.last_name,
         collegeId: element.college_id,
       });
-    });
+    });//The really ugly code here is due to the the fact I love camelCase and all was written in it originally but snake_case is requires by SQL
     return students3;
   },
   checkLoginStatus: (root, args, context, info) => {
@@ -80,6 +83,7 @@ const Mutation = {
   },
 };
 
+// THis automatically fills in the fields that are defined in the schema but are maybe not in the database
 const Student = {
   fullName: (root, args, context, info) => {
     return root.firstName + " " + root.lastName;

@@ -36,6 +36,8 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: ({ req }) => {
+    //req.user is the data that was stored in the access token, even if expired, it is the data form the new access token
+    // Clearly then, this data can be a bit old but that is okay
     const user = req.user;
     return { user: user, pg: pgClient };
   },
@@ -46,7 +48,7 @@ const app = express();
 
 const corsOptions = {
   origin: "*",
-  credentials: true, // <-- REQUIRED backend setting
+  credentials: true, 
   exposedHeaders: ["x-refresh-token", "x-token", "x-auth-success"],
 };
 
@@ -59,10 +61,15 @@ app.use(cors(corsOptions));
 
 app.use(async (req, res, next) => {
   // Code that is excecuted before login thing is varified
+  // I am not using it and I could delte it but it serves as a reminder to me how this works
   next();
 });
 
 app.use(async (req, res, next) => {
+
+  // THis entire thing gets the tokens from the headers and validates them with the public key
+  //First, it tried the access token, if that throws an error, it tries the refresh token, that can either throw and error or turout to be invalidated
+
   const accessToken = req.headers.authorization;
   const refreshToken = req.headers["x-grant-type"];
   try {
@@ -99,6 +106,7 @@ app.use(async (req, res, next) => {
 });
 app.use(async (req, res, next) => {
   // Code that is excecuted afte login thing is varified
+  //Same as before
   next();
 });
 

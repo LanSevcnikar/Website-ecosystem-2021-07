@@ -1,9 +1,7 @@
 const jwt = require("jsonwebtoken");
 const fs = require('fs');
 
-
 const privatekey = fs.readFileSync('./keys/private.key', 'utf8');
-const publickey = fs.readFileSync('./keys/public.key', 'utf8');
 
 const signOptions = {
   issuer: "Lan's code",
@@ -11,9 +9,9 @@ const signOptions = {
 }
 
 async function createTokens(user) {
-  const userModelRefresh = { id: user.id };
+  const userModelRefresh = { id: user.id }; //Only stores the userId
   const refreshToken = await jwt.sign(userModelRefresh, privatekey, { ...signOptions, expiresIn: 15 * 60 });
-  const userModelAccess = { ...user };
+  const userModelAccess = { ...user };      //Holds most of the data for the user, such as name, id... (all of this can be read by the browser)
   const accessToken = await jwt.sign(userModelAccess, privatekey, {  ...signOptions, expiresIn: 3 * 60 });
 
   return [accessToken, refreshToken, userModelAccess];

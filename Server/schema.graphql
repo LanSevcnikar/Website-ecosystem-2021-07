@@ -41,26 +41,3 @@ type AuthPayload {
   token: String!
   refreshToken: String!
 }
-
-#The exclamation mark means that the field is non nullable
-
-# mutation somemutation {
-#   createStudent(collegeId: "col-101", firstName: "Susan", lastName: "George") {
-#     id
-#     fullName
-#     college {
-#       name
-#     }
-#   }
-# }
-
-# mutation someothermutation {
-#   createStudent(collegeId: "col-101", firstName: "Jure", lastName: "Tim")
-# }
-
-# query somequery {
-#   greeting
-#   studentById(id: "rJMtnfEpO") {
-#     fullName
-#   }
-# }
