@@ -1,10 +1,8 @@
-<template style="height: 100%" >
+<template style="height: 100%">
   <div class="h-100 asd">
     <div align="center">
-      <div style="display: table" class="h-100 w-50" >
-        <div
-          class="card m-3 p-3 "
-        >
+      <div style="display: table" class="h-100 w-50">
+        <div class="card m-3 p-3 ">
           <div v-if="loggedIn == false">
             <div class="row">
               <div class="col-6" align="center">
@@ -112,19 +110,19 @@ export default {
       loggedIn: false,
     };
   },
-  created: async function () {
+  created: async function() {
     const data = { query: "{ checkLoginStatus }" };
-    const res = await callAPI(data, "http://localhost:4000/graphql");
+    const res = await callAPI(data);
     if (res.status != 200) this.loggedIn = false;
     else this.loggedIn = res.data.data.checkLoginStatus;
   },
   methods: {
-    switchLoginSignUp: function () {
+    switchLoginSignUp: function() {
       const pt = this.website;
       this.website = this.oppositeWebsite;
       this.oppositeWebsite = pt;
     },
-    logout: async function () {
+    logout: async function() {
       const data = {
         query: `
             mutation InvalidateTokenMutation {
@@ -141,7 +139,8 @@ export default {
 
       this.loggedIn = false;
     },
-    checkForm: async function (e) {
+    checkForm: async function(e) {
+      console.log('hi')
       e.preventDefault();
       const email = this.email;
       const password = this.password;
@@ -169,7 +168,7 @@ export default {
           },
         };
 
-        const res = await callAPI(data);
+        const res = await callAPI(data, "http://95.179.206.119:4000/api");
         if (res.data.errors || res.status != 200) {
           alert("something went wrong");
         }
@@ -191,7 +190,12 @@ export default {
         },
       };
 
-      const res = await callAPI(data, "http://localhost:4000/graphql");
+      console.log('hi')
+
+      const res = await callAPI(data, "http://95.179.206.119:4000/auth");
+
+      
+      console.log(res);
 
       try {
         const token = res.data.data.logInUser.token;
@@ -199,7 +203,7 @@ export default {
         localStorage.setItem("jwtAccessToken", token);
         localStorage.setItem("jwtRefreshToken", refreshToken);
         const dTime = getUserJwt();
-        console.log(dTime)
+        console.log(dTime);
         this.loggedIn = true;
       } catch {
         const error = res.data.errors[0].message;
