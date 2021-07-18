@@ -1,8 +1,19 @@
 import getUserJwt from "./getUserJwt";
 
-async function callAPI() {
-  return await fetch('http://95.179.206.119:4000/auth')
-  
+async function callAPI(url, data, token, refreshToken) {
+  let payload = {
+    method: "POST",
+    headers: {
+      "x-grant-type": refreshToken,
+      "Content-Type": "application/json",
+    },
+    body: data,
+  };
+  if (token) {
+    payload.headers.authorization = "Bearer " + token;
+  }
+  const response = await fetch(url, payload).catch(() => "");
+  return response;
 }
 
 export default async function(
@@ -15,13 +26,19 @@ export default async function(
   if (!refreshToken) refreshToken = "";
   data = JSON.stringify(data);
   const res = await callAPI(url, data, token, refreshToken);
-  console.log(res);
+
   const status = res.status;
-  const resdata = await res.json();
-  console.log(resdata);
+  let resdata = res;
+  if (url === "https://first-testing.hasura.app/v1/graphql")
+    resdata = await res.json();
+    
   const newAccessToken = res.headers.get("x-token") || "";
   const newRefreshToken = res.headers.get("x-refresh-token") || "";
   const authSuccess = res.headers.get("x-auth-success");
+
+  console.log(newAccessToken, newRefreshToken, authSuccess);
+  console.log('hi')
+
   if (authSuccess == "true") {
     if (newAccessToken) {
       localStorage.setItem("jwtAccessToken", newAccessToken);
