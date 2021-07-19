@@ -2,7 +2,7 @@
   <div class="h-100 asd">
     <div align="center">
       <div style="display: table" class="h-100 w-50">
-        <div class="card m-3 p-3 ">
+        <div class="card m-3 p-3">
           <div v-if="loggedIn == false">
             <div class="row">
               <div class="col-6" align="center">
@@ -96,7 +96,6 @@
 
 <script>
 import callAPI from "../functions/callAPI";
-import getUserJwt from "../functions/getUserJwt";
 
 export default {
   data() {
@@ -110,19 +109,22 @@ export default {
       loggedIn: false,
     };
   },
-  created: async function() {
-    const data = { query: "{ checkLoginStatus }" };
+  created: async function () {
+    this.loggedIn = (localStorage.getItem('jwtRefreshToken') != null);
+    const data = { query: "{ students(limit: 1) { id } }" };
     const res = await callAPI(data);
+    console.log(res)
     if (res.status != 200) this.loggedIn = false;
-    else this.loggedIn = res.data.data.checkLoginStatus;
+    if (res.data.errors) this.loggedIn = false;
+    else this.loggedIn = true;
   },
   methods: {
-    switchLoginSignUp: function() {
+    switchLoginSignUp: function () {
       const pt = this.website;
       this.website = this.oppositeWebsite;
       this.oppositeWebsite = pt;
     },
-    logout: async function() {
+    logout: async function () {
       const data = {
         query: `
             mutation InvalidateTokenMutation {
@@ -139,8 +141,8 @@ export default {
 
       this.loggedIn = false;
     },
-    checkForm: async function(e) {
-      console.log('hi')
+    checkForm: async function (e) {
+      console.log("hi");
       e.preventDefault();
       const email = this.email;
       const password = this.password;
@@ -177,37 +179,37 @@ export default {
 
       const data = {
         query: `
-            mutation logInUser($logInUserEmail: String!, $logInUserPassword: String!){
-              logInUser(email: $logInUserEmail, password: $logInUserPassword) {
-                token,
+            mutation MyMutation($email: String = "", $password: String = "") {
+              loginUser(inputData: {email: $email, password: $password}) {
+                accessToken
                 refreshToken
+                error
+                success
               }
             }
           `,
         variables: {
-          logInUserEmail: email,
-          logInUserPassword: password,
+          email: email,
+          password: password,
         },
       };
 
-      console.log('hi')
+      console.log("hi");
 
-      const res = await callAPI(data, "http://95.179.206.119:4000/auth");
-
-      
-      console.log(res);
+      const res = await callAPI(data);
 
       try {
-        const token = res.data.data.logInUser.token;
-        const refreshToken = res.data.data.logInUser.refreshToken;
-        localStorage.setItem("jwtAccessToken", token);
-        localStorage.setItem("jwtRefreshToken", refreshToken);
-        const dTime = getUserJwt();
-        console.log(dTime);
-        this.loggedIn = true;
+        if (res.data.data.loginUser.success == false) {
+          alert("Login failed with error: " + res.data.data.loginUser.error);
+        } else {
+          const newAccessToken = res.data.data.loginUser.accessToken || "";
+          const newRefreshToken = res.data.data.loginUser.refreshToken || "";
+          localStorage.setItem("jwtAccessToken", newAccessToken);
+          localStorage.setItem("jwtRefreshToken", newRefreshToken);
+          this.loggedIn = true;
+        }
       } catch {
         const error = res.data.errors[0].message;
-        console.log(error);
         alert("Login failed with error: " + error);
       }
       e.preventDefault();

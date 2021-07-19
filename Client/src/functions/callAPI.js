@@ -16,10 +16,8 @@ async function callAPI(url, data, token, refreshToken) {
   return response;
 }
 
-export default async function(
-  data,
-  url = "https://first-testing.hasura.app/v1/graphql"
-) {
+export default async function(data){
+  const  url = "https://first-testing.hasura.app/v1/graphql";
   let token = localStorage.getItem("jwtAccessToken");
   let refreshToken = localStorage.getItem("jwtRefreshToken");
   if (!token) token = "";
@@ -28,9 +26,8 @@ export default async function(
   const res = await callAPI(url, data, token, refreshToken);
 
   const status = res.status;
-  let resdata = res;
-  if (url === "https://first-testing.hasura.app/v1/graphql")
-    resdata = await res.json();
+  const resdata = await res.json();
+  console.log(resdata)
     
   const newAccessToken = res.headers.get("x-token") || "";
   const newRefreshToken = res.headers.get("x-refresh-token") || "";
