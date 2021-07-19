@@ -50,7 +50,7 @@ export default {
 
         `,
       };
-      const res = await callAPI(data);
+      const res = await callAPI(data, '/graphql');
       if (res.data.errors) alert(res.data.errors[0].message);
       else {
         if (res.status == 200) {

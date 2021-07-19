@@ -110,10 +110,10 @@ export default {
     };
   },
   created: async function () {
-    this.loggedIn = (localStorage.getItem('jwtRefreshToken') != null);
+    this.loggedIn = localStorage.getItem("jwtRefreshToken") != null;
     const data = { query: "{ students(limit: 1) { id } }" };
     const res = await callAPI(data);
-    console.log(res)
+    console.log(res);
     if (res.status != 200) this.loggedIn = false;
     if (res.data.errors) this.loggedIn = false;
     else this.loggedIn = true;
@@ -125,16 +125,32 @@ export default {
       this.oppositeWebsite = pt;
     },
     logout: async function () {
-      const data = {
-        query: `
-            mutation InvalidateTokenMutation {
-              invalidateToken
-            }
-          `,
-      };
-      await callAPI(data);
+      const refreshTokenCurrent = localStorage.getItem("jwtRefreshToken");
 
-      // THis makes more sense but makes the app look less advanced than it actually is
+      const data = JSON.stringify({
+        query: `
+        mutation MyMutation($token: String = "") {
+          insert_invalid_tokens_one(object: {token: $token}) {
+            token
+          }
+        }`,
+        variables: {
+          token: refreshTokenCurrent,
+        },
+      });
+
+      let payload = {
+        method: "POST",
+        headers: {},
+        body: data,
+      };
+
+      //This is the only one that must not, uner any cicumstance, go through the centeral logic
+      // We do not want to create a new access token
+
+      await fetch("https://first-testing.hasura.app/v1/graphql", payload).catch(
+        (e) => console.log(e)
+      );
 
       localStorage.setItem("jwtAccessToken", "");
       localStorage.setItem("jwtRefreshToken", "");
@@ -153,24 +169,29 @@ export default {
         const fname = this.fname;
         const lname = this.lname;
         this.fname = this.lname = "";
+        console.log("Sfdadf");
         console.log(email, password, fname, lname);
+
         const data = {
           query: `
-            mutation signUp($signUpUserInput: SignUpInput!){
-              signUpUser(input: $signUpUserInput)
+           mutation MyMutation($password: String = "", $last_name: String = "", $first_name: String = "", $email: String = "") {
+              insert_students(objects: {email: $email, first_name: $first_name, last_name: $last_name, password: $password}){
+                affected_rows,
+              }
             }
           `,
           variables: {
-            signUpUserInput: {
-              email: email,
-              fname: fname,
-              password: password,
-              lname: lname,
-            },
+            password: password,
+            last_name: lname,
+            email: email,
+            first_name: fname,
           },
         };
 
-        const res = await callAPI(data, "http://95.179.206.119:4000/api");
+        console.log("Sfdadf");
+
+        const res = await callAPI(data, "/graphql");
+        console.log("Sfdadf");
         if (res.data.errors || res.status != 200) {
           alert("something went wrong");
         }
@@ -178,40 +199,22 @@ export default {
       }
 
       const data = {
-        query: `
-            mutation MyMutation($email: String = "", $password: String = "") {
-              loginUser(inputData: {email: $email, password: $password}) {
-                accessToken
-                refreshToken
-                error
-                success
-              }
-            }
-          `,
-        variables: {
-          email: email,
-          password: password,
-        },
+        email: email,
+        password: password,
       };
 
-      console.log("hi");
+      const res = await callAPI(data, "/login");
 
-      const res = await callAPI(data);
-
-      try {
-        if (res.data.data.loginUser.success == false) {
-          alert("Login failed with error: " + res.data.data.loginUser.error);
-        } else {
-          const newAccessToken = res.data.data.loginUser.accessToken || "";
-          const newRefreshToken = res.data.data.loginUser.refreshToken || "";
-          localStorage.setItem("jwtAccessToken", newAccessToken);
-          localStorage.setItem("jwtRefreshToken", newRefreshToken);
-          this.loggedIn = true;
-        }
-      } catch {
-        const error = res.data.errors[0].message;
-        alert("Login failed with error: " + error);
+      if (res.data[1]) {
+        alert("Login failed with error: " + res.data[1]);
+      } else {
+        const newAccessToken = res.data[0][0];
+        const newRefreshToken = res.data[0][1];
+        localStorage.setItem("jwtAccessToken", newAccessToken);
+        localStorage.setItem("jwtRefreshToken", newRefreshToken);
+        this.loggedIn = true;
       }
+
       e.preventDefault();
     },
   },
