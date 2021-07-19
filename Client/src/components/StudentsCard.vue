@@ -58,7 +58,7 @@ export default {
         },
       };
 
-      await callAPI(data);
+      await callAPI(data, '/graphql');
       await this.getstudents();
     },
 
@@ -70,17 +70,16 @@ export default {
           students(order_by: {last_name: asc}) {
             first_name
             last_name
-            email
             id
+            email
             StudentsSchool {
               name
             }
           }
         }
-
         `,
       };
-      const res = await callAPI(data);
+      const res = await callAPI(data, '/graphql');
       if (res.data.errors) alert(res.data.errors[0].message);
       else {
         if (res.status == 200) {

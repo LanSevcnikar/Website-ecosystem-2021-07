@@ -35,7 +35,7 @@ export default async function(data, urlHook){
   const authSuccess = res.headers.get("x-auth-success");
 
   console.log(newAccessToken, newRefreshToken, authSuccess);
-  console.log('hi')
+  console.log('hiss')
 
   if (authSuccess == "true") {
     if (newAccessToken) {
