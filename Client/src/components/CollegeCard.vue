@@ -25,6 +25,7 @@
 <script>
 import collegeItem from "./_collegeItem.vue";
 import callAPI from "../functions/callAPI";
+import loadAPI from "../functions/loadingScreen"
 
 export default {
   components: {
@@ -50,7 +51,7 @@ export default {
 
         `,
       };
-      const res = await callAPI(data, '/graphql');
+      const res = await loadAPI(callAPI, data, "/graphql") //await callAPI(data, '/graphql');
       if (res.data.errors) alert(res.data.errors[0].message);
       else {
         if (res.status == 200) {

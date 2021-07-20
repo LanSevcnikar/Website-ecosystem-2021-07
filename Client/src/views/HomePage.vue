@@ -9,6 +9,10 @@
         <p>
           {{ getCounter }}
         </p>
+        <br />
+        <button class="btn btn-primary" @click="somefunction()">
+          State
+        </button>
       </main>
     </div>
   </div>
@@ -16,7 +20,19 @@
 
 <script>
 import { mapGetters } from "vuex";
-export default { computed: mapGetters(["getCounter"]) };
+import loader from "../functions/loadingScreen";
+
+export default {
+  components: {},
+  computed: mapGetters(["getCounter"]),
+  methods: {
+    somefunction() {
+      console.log("Hi")
+      loader();
+    },
+  },
+};
+
 </script>
 
 <style>

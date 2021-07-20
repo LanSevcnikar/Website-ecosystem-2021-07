@@ -3,15 +3,20 @@ import { createStore } from 'vuex'
 export const store = createStore({
   state() {
     return {
-      count: 1
+      loading: false,
+      count: 0
     }
   },
   getters: {
+    isLoading: (state) => state.loading,
     getCounter: (state) => state.count,
   },
   mutations: {
-    increment (state) { 
-      state.count++
+    change (state, thing) { 
+      state.loading = thing
      },
+     increment (state) {
+       state.count += 1
+     }
   }
 })

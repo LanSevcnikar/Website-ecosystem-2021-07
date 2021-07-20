@@ -101,6 +101,7 @@
 
 <script>
 import callAPI from "../functions/callAPI";
+import loadAPI from "../functions/loadingScreen";
 import Hashes from "jshashes";
 
 export default {
@@ -116,22 +117,29 @@ export default {
       loading: false,
     };
   },
-  created: async function () {
+  created: async function() {
+    //Note, this can be implemented way better but it would always be less correct
+    //How I would do it, if it were up to me, I would create a function
+      // This function checks the access token at the client side, then if okay, sets it to okay (instant)
+      // otherwise function checks the refresh token at the client side, then if okay, sets it to okay (instant) and calls the APi right after to refresh
+      // If neither, it sets it to that right away
+    // This works better but something like blacklisting would not be gotten with this. Many ways to do it, do not feel like writing
+
     this.loggedIn = localStorage.getItem("jwtRefreshToken") != null;
     const data = { query: "{ students(limit: 1) { id } }" };
-    const res = await callAPI(data, '/graphql');
+    const res = await loadAPI(callAPI, data, "/graphql");// await callAPI(data, "/graphql");
     console.log(res);
     if (res.status != 200) this.loggedIn = false;
     if (res.data.errors) this.loggedIn = false;
     else this.loggedIn = true;
   },
   methods: {
-    switchLoginSignUp: function () {
+    switchLoginSignUp: function() {
       const pt = this.website;
       this.website = this.oppositeWebsite;
       this.oppositeWebsite = pt;
     },
-    logout: async function () {
+    logout: async function() {
       this.loading = true;
       const refreshTokenCurrent = localStorage.getItem("jwtRefreshToken");
 
@@ -153,12 +161,13 @@ export default {
         body: data,
       };
 
+      await loadAPI(
+        fetch,
+        "https://first-testing.hasura.app/v1/graphql",
+        payload
+      );
       //This is the only one that must not, uner any cicumstance, go through the centeral logic
       // We do not want to create a new access token
-
-      await fetch("https://first-testing.hasura.app/v1/graphql", payload).catch(
-        (e) => console.log(e)
-      );
 
       localStorage.setItem("jwtAccessToken", "");
       localStorage.setItem("jwtRefreshToken", "");
@@ -166,9 +175,8 @@ export default {
       this.loggedIn = false;
       this.loading = false;
     },
-    checkForm: async function (e) {
+    checkForm: async function(e) {
       this.loading = true;
-      console.log("hci");
       e.preventDefault();
       const email = this.email;
       const password = this.password;
@@ -199,9 +207,8 @@ export default {
           },
         };
 
-        console.log("Sfdadf");
 
-        const res = await callAPI(data, "/graphql");
+        const res = await loadAPI(callAPI, data, "/graphql")// await callAPI(data, "/graphql");
         console.log("Sfdadf");
         if (res.data.errors || res.status != 200) {
           alert("something went wrong");
@@ -214,7 +221,7 @@ export default {
         password: password,
       };
 
-      const res = await callAPI(data, "/login");
+      const res = await loadAPI(callAPI, data, "/login") //await callAPI(data, "/login");
 
       if (res.data[1]) {
         alert("Login failed with error: " + res.data[1]);
