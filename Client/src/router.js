@@ -21,6 +21,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const userData = JSON.parse(localStorage.getItem("userData"))
+    console.log('routing starting', userData)
     if (!userData || !userData.email || (Math.floor(Date.now() / 1000) > userData.expires)) {
         if (to.path == '/aboutme') {
             if(from.path == '/login'){

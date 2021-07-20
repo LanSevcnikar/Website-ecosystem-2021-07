@@ -1,5 +1,3 @@
-import getUserJwt from "./getUserJwt";
-
 async function callAPI(url, data, token, refreshToken) {
   let payload = {
     method: "POST",
@@ -16,7 +14,7 @@ async function callAPI(url, data, token, refreshToken) {
 }
 
 export default async function(data, urlHook){
-  const url = "http://95.179.206.119:4000" + urlHook;
+  const url = "http://192.248.167.127:4000" + urlHook;
 
   let token = localStorage.getItem("jwtAccessToken");
   let refreshToken = localStorage.getItem("jwtRefreshToken");
@@ -37,17 +35,21 @@ export default async function(data, urlHook){
   console.log(newAccessToken, newRefreshToken, authSuccess);
   console.log('hiss')
 
+  
+  localStorage.setItem("jwtAccessToken", "");
+  localStorage.setItem("jwtRefreshToken", "");
+  localStorage.setItem("userData", JSON.stringify({}));
+
   if (authSuccess == "true") {
     if (newAccessToken) {
       localStorage.setItem("jwtAccessToken", newAccessToken);
       localStorage.setItem("jwtRefreshToken", newRefreshToken);
+      localStorage.setItem("userData", JSON.stringify({email: "there"}));
     }
-    const dTime = getUserJwt();
-    console.log(dTime);
   } else {
-    //localStorage.setItem("jwtAccessToken", "");
-    //localStorage.setItem("jwtRefreshToken", "");
-    //localStorage.setItem("userData", JSON.stringify({}));
+    localStorage.setItem("jwtAccessToken", "");
+    localStorage.setItem("jwtRefreshToken", "");
+    localStorage.setItem("userData", JSON.stringify({}));
   }
 
   return { status: status, data: resdata };

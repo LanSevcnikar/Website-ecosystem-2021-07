@@ -171,6 +171,7 @@ export default {
 
       localStorage.setItem("jwtAccessToken", "");
       localStorage.setItem("jwtRefreshToken", "");
+      localStorage.setItem("userData", "{}");
 
       this.loggedIn = false;
       this.loading = false;
@@ -230,6 +231,7 @@ export default {
         const newRefreshToken = res.data[0][1];
         localStorage.setItem("jwtAccessToken", newAccessToken);
         localStorage.setItem("jwtRefreshToken", newRefreshToken);
+        localStorage.setItem("userData", JSON.stringify({email: "sometuih"}));
         this.loggedIn = true;
       }
 
