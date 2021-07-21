@@ -1,5 +1,5 @@
 <template>
-  <div class="card" style="width: 60%; margin: auto; margin-top: 3em">
+  <div class="card">
     <div class="card-body">
       <h5 class="card-title">JWT token</h5>
       <div class="card-text">

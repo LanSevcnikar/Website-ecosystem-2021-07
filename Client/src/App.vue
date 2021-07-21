@@ -6,43 +6,14 @@
         Loading...
       </h2>
     </div>
-
-    <div style="height: 100%">
-      <ul class="nav nav-fill nav-pills">
-        <li class="nav-item">
-          <router-link to="/home" class="nav-link" aria-current="page">
-            Home
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/login" class="nav-link" aria-current="page">
-            Login
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link
-            to="/collagesandstudents"
-            class="nav-link"
-            aria-current="page"
-          >
-            Colleges and students
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/aboutme" class="nav-link" aria-current="page">
-            About me
-          </router-link>
-        </li>
-      </ul>
-      <div class="container-fluid" style="height: 100%">
-        <router-view style="height: 100%"></router-view>
-      </div>
-    </div>
+  <nav-tab></nav-tab>
+    
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import navTab from './components/navTab.vue'
 
 export default {
   name: "App",
@@ -50,7 +21,9 @@ export default {
     return {};
   },
   computed: mapGetters(["isLoading"]),
-  components: {},
+  components: {
+    navTab,
+  },
 };
 </script>
 
@@ -66,15 +39,19 @@ export default {
   height: 100vh;
 }
 
-.loadingScreenTHingy {
-  position: absolute;
-  width: 100%;
+.mainThing{
+  
   height: 100%;
+}
+
+.loadingScreenTHingy {
+  position: fixed;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 95;
   background-color: white;
-  z-index: 90;
-  opacity: 0.5;
-  pointer-events: none;
-  text-align: center;
+  opacity: 0.7;
 }
 
 .loadingTitle {

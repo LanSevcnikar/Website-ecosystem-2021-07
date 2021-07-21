@@ -1,7 +1,8 @@
 <template style="height: 100%">
   <div class="h-100 asd">
-    <div align="center">
-      <div style="display: table" class="h-100 w-50">
+    <div class="m-auto row d-flex justify-content-center">
+      <div class="col-11 mt-2 mt-sm-3"></div>
+      <div class="h-100 col-12 col-sm-11 col-md-8 col-lg-6">
         <div class="card m-3 p-3">
           <div class="loadingornot" v-if="loading">Loading</div>
           <div class="loadingornot" v-if="loading == false">

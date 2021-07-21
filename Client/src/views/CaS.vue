@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="m-auto">
-      <jwt></jwt>
-      <greeting-card> </greeting-card>
-      <college-card> </college-card>
-      <students-card></students-card>
+    <div class="row w-75 m-auto d-flex justify-content-around">
+      <div class="col-12 col-lg-5 mt-3"><jwt></jwt></div>
+      <div class="col-12 col-lg-5 mt-3"><greeting-card> </greeting-card></div>
+      <div class="col-12 col-lg-5 mt-3"><college-card> </college-card></div>
+      <div class="col-12 col-lg-5 mt-3"><students-card></students-card></div>
     </div>
   </div>
 </template>

@@ -4,7 +4,7 @@
     @mouseover="hovering = false"
     @mouseleave="hovering = true"
   >
-    <div class="col-9">
+    <div class="col-12 col-sm-9">
       <div class="h4">
         {{ name }}
       </div>

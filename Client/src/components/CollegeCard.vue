@@ -1,5 +1,5 @@
 <template>
-  <div class="card" style="width: 60%; margin: auto; margin-top: 3em">
+  <div class="card">
     <div class="card-body">
       <div class="row">
         <div class="col-9 col-md-7">

@@ -1,5 +1,5 @@
 <template>
-  <div class="card" style="width: 60%; margin: auto; margin-top: 3em">
+  <div class="card">
     <div class="card-body">
       <h5 class="card-title">Greet me</h5>
       <h6 class="card-subtitle mb-2 text-muted">
