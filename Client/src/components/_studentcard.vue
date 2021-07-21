@@ -1,6 +1,7 @@
 <template>
   <div
     class="row p-3"
+    style="width: 98%"
     @mouseover="hovering = false"
     @mouseleave="hovering = true"
   >

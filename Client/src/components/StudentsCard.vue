@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <div class="card-body">
+    <div class="card-body"  >
       <div class="row">
         <div class="col-7">
           <h5 class="card-title">Students card</h5>
@@ -13,15 +13,23 @@
           <button class="btn btn-primary" @click="getstudents">Get 'em</button>
         </div>
       </div>
-      <student-item
-        v-for="(coll, index) in students"
-        :key="index"
-        :index="index"
-        :name="coll.fullName"
-        :email="coll.email"
-        :uni="coll.college"
-        @deleteMe="deleteMe"
-      ></student-item>
+      <div  v-if="students.length" style="position: relative; height: 300px;">
+        <div class="someDiv" style="max-height: 100%; overflow: auto">
+          <student-item
+            v-for="(coll, index) in students"
+            :key="index"
+            :index="index"
+            :name="coll.fullName"
+            :email="coll.email"
+            :uni="coll.college"
+            @deleteMe="deleteMe"
+          ></student-item>
+        </div>
+      </div>
+      <div v-else style="position: relative;" class="m-auto mt-2">
+      <i> No students to display </i> 
+      </div>
+
       <div class="text-danger mt-2" v-if="reminder">
         You need to be logged in to see this
       </div>
@@ -45,7 +53,7 @@ export default {
   },
   methods: {
     deleteMe: async function (index) {
-      console.log(index, this.students[index])
+      console.log(index, this.students[index]);
       const data = {
         query: `
             mutation MyMutation($id: bigint = -1) {
@@ -59,7 +67,7 @@ export default {
         },
       };
 
-      await loadAPI(callAPI, data, "/graphql") //await callAPI(data, '/graphql');
+      await loadAPI(callAPI, data, "/graphql"); //await callAPI(data, '/graphql');
       await this.getstudents();
     },
 
@@ -80,7 +88,7 @@ export default {
         }
         `,
       };
-      const res = await loadAPI(callAPI, data, "/graphql") //await callAPI(data, '/graphql');
+      const res = await loadAPI(callAPI, data, "/graphql"); //await callAPI(data, '/graphql');
       if (res.data.errors) alert(res.data.errors[0].message);
       else {
         if (res.status == 200) {
